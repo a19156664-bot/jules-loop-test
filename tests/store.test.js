@@ -45,6 +45,14 @@ function runTests() {
   assert.strictEqual(store.getTodos().length, 0);
   console.log('✅ Test 3 Passed: deleteTodo()');
 
+  // Test 4: Clear Todos
+  store.addTodo('Test Task A');
+  store.addTodo('Test Task B');
+  assert.strictEqual(store.getTodos().length, 2);
+  store.clearTodos();
+  assert.strictEqual(store.getTodos().length, 0);
+  console.log('✅ Test 4 Passed: clearTodos()');
+
   console.log('🎉 All tests passed successfully!');
 }
 

@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const emptyState = document.getElementById('empty-state');
   const counter = document.getElementById('todo-counter');
   const filterBtns = document.querySelectorAll('.filter-btn');
+  const btnClearAll = document.getElementById('btn-clear-all');
 
   let currentFilter = 'all';
 
@@ -117,6 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
       render();
     });
   });
+
+  // Handle Clear All Button
+  if (btnClearAll) {
+    btnClearAll.addEventListener('click', () => {
+      store.clearTodos();
+      render();
+    });
+  }
 
   // Initial Render
   render();

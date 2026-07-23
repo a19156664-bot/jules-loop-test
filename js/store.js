@@ -75,6 +75,13 @@ class TodoStore {
     todos = todos.filter(item => item.id !== id);
     this.saveTodos(todos);
   }
+
+  /**
+   * Clear all todo items
+   */
+  clearTodos() {
+    this.saveTodos([]);
+  }
 }
 
 // Export for Node/Jest environment testing & browser global
