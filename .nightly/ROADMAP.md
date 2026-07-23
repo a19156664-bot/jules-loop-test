@@ -45,3 +45,12 @@
 - **DoD (完了条件)**:
   - [x] `tests/store.test.js` （ロジック検証用）を作成すること
   - [x] テストが正常に全件パスし、画面上でエラーなく動作が完結すること
+
+---
+
+### [x] Task 06: [NEW] 完了済みタスクの一括削除（Clear Completed）機能の実装
+- **DoD (完了条件)**:
+  - [x] `js/store.js` に `clearCompletedTodos()` メソッドを追加し、`completed: true` のタスクのみをクリア・保存すること
+  - [x] `tests/store.test.js` に `clearCompletedTodos()` の単体テストを追加し、既存テスト含め全件パスすること
+  - [x] `index.html` に「完了済みを削除」ボタン (`#btn-clear-completed`) を追加し、`js/app.js` でクリック時に `clearCompletedTodos()` とUI再描画を実行すること
+

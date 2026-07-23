@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const counter = document.getElementById('todo-counter');
   const filterBtns = document.querySelectorAll('.filter-btn');
   const btnClearAll = document.getElementById('btn-clear-all');
+  const btnClearCompleted = document.getElementById('btn-clear-completed');
 
   let currentFilter = 'all';
 
@@ -123,6 +124,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnClearAll) {
     btnClearAll.addEventListener('click', () => {
       store.clearTodos();
+      render();
+    });
+  }
+
+  // Handle Clear Completed Button
+  if (btnClearCompleted) {
+    btnClearCompleted.addEventListener('click', () => {
+      store.clearCompletedTodos();
       render();
     });
   }

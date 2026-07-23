@@ -53,6 +53,19 @@ function runTests() {
   assert.strictEqual(store.getTodos().length, 0);
   console.log('✅ Test 4 Passed: clearTodos()');
 
+  // Test 5: Clear Completed Todos
+  store.clearTodos();
+  const item1 = store.addTodo('Active Task');
+  const item2 = store.addTodo('Completed Task');
+  store.toggleTodo(item2.id);
+  assert.strictEqual(store.getTodos().length, 2);
+  store.clearCompletedTodos();
+  const remaining = store.getTodos();
+  assert.strictEqual(remaining.length, 1);
+  assert.strictEqual(remaining[0].id, item1.id);
+  assert.strictEqual(remaining[0].text, 'Active Task');
+  console.log('✅ Test 5 Passed: clearCompletedTodos()');
+
   console.log('🎉 All tests passed successfully!');
 }
 

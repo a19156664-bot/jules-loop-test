@@ -82,6 +82,15 @@ class TodoStore {
   clearTodos() {
     this.saveTodos([]);
   }
+
+  /**
+   * Clear all completed todo items
+   */
+  clearCompletedTodos() {
+    let todos = this.getTodos();
+    todos = todos.filter(item => !item.completed);
+    this.saveTodos(todos);
+  }
 }
 
 // Export for Node/Jest environment testing & browser global
