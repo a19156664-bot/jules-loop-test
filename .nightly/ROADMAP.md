@@ -54,3 +54,11 @@
   - [x] `tests/store.test.js` に `clearCompletedTodos()` の単体テストを追加し、既存テスト含め全件パスすること
   - [x] `index.html` に「完了済みを削除」ボタン (`#btn-clear-completed`) を追加し、`js/app.js` でクリック時に `clearCompletedTodos()` とUI再描画を実行すること
 
+---
+
+### [x] Task 07: [NEW] タスクタイトルの編集（インライン編集）機能の実装
+- **DoD (完了条件)**:
+  - [x] `js/store.js` に `updateTodo(id, newText)` メソッドを追加し、指定IDのタスクテキストを更新して `localStorage` に保存すること
+  - [x] `tests/store.test.js` に `updateTodo()` の単体テスト（Test 6）を追加し、既存テスト（Test 1〜5）を含め全6件が正常パスすること
+  - [x] `js/app.js` にて、タスクタイトルのダブルクリック（または編集UI）でタイトル入力変更を可能にし、`store.updateTodo()` 後にUI再描画を行うこと
+

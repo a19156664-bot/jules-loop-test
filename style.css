@@ -194,6 +194,7 @@ body {
   width: 20px;
   height: 20px;
   border-radius: 5px;
+  flex-shrink: 0;
   border: 2px solid var(--text-muted);
   display: flex;
   align-items: center;
@@ -205,6 +206,23 @@ body {
 .todo-item.completed .checkbox-custom {
   background: var(--success-color);
   border-color: var(--success-color);
+}
+
+.edit-input {
+  flex: 1;
+  background: #0f172a;
+  border: 1px solid var(--accent-color);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 1rem;
+  color: var(--text-main);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.todo-text {
+  cursor: pointer;
+  user-select: none;
 }
 
 .btn-delete {

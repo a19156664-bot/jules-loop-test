@@ -67,6 +67,23 @@ class TodoStore {
   }
 
   /**
+   * Update the text of a todo item
+   * @param {string} id 
+   * @param {string} newText 
+   * @returns {boolean} True if updated, false if not found
+   */
+  updateTodo(id, newText) {
+    const todos = this.getTodos();
+    const todo = todos.find(item => item.id === id);
+    if (todo) {
+      todo.text = newText.trim();
+      this.saveTodos(todos);
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Delete a todo item by id
    * @param {string} id 
    */

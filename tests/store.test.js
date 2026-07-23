@@ -66,6 +66,15 @@ function runTests() {
   assert.strictEqual(remaining[0].text, 'Active Task');
   console.log('✅ Test 5 Passed: clearCompletedTodos()');
 
+  // Test 6: Update Todo
+  store.clearTodos();
+  const itemToUpdate = store.addTodo('Old Text');
+  const isUpdated = store.updateTodo(itemToUpdate.id, 'New Text');
+  assert.strictEqual(isUpdated, true);
+  const updatedItem = store.getTodos().find(item => item.id === itemToUpdate.id);
+  assert.strictEqual(updatedItem.text, 'New Text');
+  console.log('✅ Test 6 Passed: updateTodo()');
+
   console.log('🎉 All tests passed successfully!');
 }
 

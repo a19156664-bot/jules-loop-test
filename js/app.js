@@ -76,7 +76,76 @@ document.addEventListener('DOMContentLoaded', () => {
         render();
       };
       checkbox.addEventListener('click', handleToggle);
-      todoText.addEventListener('click', handleToggle);
+      
+      // Inline Editing
+      let isEditing = false;
+      todoText.addEventListener('dblclick', () => {
+        if (todo.completed || isEditing) return; // Don't edit if completed
+        isEditing = true;
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = todo.text;
+        input.className = 'edit-input';
+        
+        // Replace span with input
+        todoText.replaceWith(input);
+        input.focus();
+        
+        const saveEdit = () => {
+          const newText = input.value.trim();
+          if (newText && newText !== todo.text) {
+            store.updateTodo(todo.id, newText);
+          } else if (!newText) {
+            // If empty, delete the todo or revert. Let's revert for now.
+            // Or just update to original (no-op).
+          }
+          isEditing = false;
+          render();
+        };
+
+        const cancelEdit = () => {
+          isEditing = false;
+          render();
+        };
+        
+        input.addEventListener('blur', saveEdit);
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            input.blur(); // Triggers blur which calls saveEdit
+          } else if (e.key === 'Escape') {
+            cancelEdit();
+          }
+        });
+      });
+
+      // Regular click toggles it if not editing, BUT we need a small delay 
+      // or check to prevent dblclick from triggering single click toggle.
+      // Easiest is to only toggle on single click if it's not a dblclick.
+      // Since dblclick is a separate event, we can remove the click handler on todoText 
+      // and only rely on the checkbox for toggling completion.
+      // If we MUST have toggle on text click, we need a timeout.
+      // Let's remove the click-to-toggle on text entirely for simplicity, 
+      // or implement a timeout.
+      
+      let clickTimeout = null;
+      todoText.addEventListener('click', (e) => {
+        if (isEditing) return;
+        
+        if (clickTimeout !== null) {
+          // It's a double click
+          clearTimeout(clickTimeout);
+          clickTimeout = null;
+        } else {
+          clickTimeout = setTimeout(() => {
+            clickTimeout = null;
+            if (!isEditing) {
+              handleToggle();
+            }
+          }, 250); // wait 250ms for a potential double click
+        }
+      });
 
       // Event Listener: Delete
       const btnDelete = li.querySelector('.btn-delete');
