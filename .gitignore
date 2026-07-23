@@ -1,0 +1,14 @@
+# Ignore python build / temporary artifacts
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Environment variables & secrets
+.env
+*.pem
+*.key

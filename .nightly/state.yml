@@ -1,0 +1,11 @@
+# ループエンジニアリング 状態管理ファイル (state.yml)
+loop_status: completed        # running / paused / stopped / completed
+last_commander_run: "2026-07-23T21:45:00+09:00"
+current_task: null
+consecutive_failures: 0       # 連続失敗カウンタ
+daily_jules_tasks_used: 5     # 日次予算カウンタ
+last_review:
+  pr: 5
+  verdict: approved           # approved / rejected / needs_split
+  notes: "Task 01-05 completed and verified with 100% unit tests passing."
+pending_queue: []             # 設計済み・未投入のタスクキュー
