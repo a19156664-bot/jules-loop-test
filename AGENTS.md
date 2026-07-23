@@ -29,9 +29,11 @@
 
 1. **Phase 1: 自律連続発注 (Antigravity)**
    - Antigravity は `.nightly/ROADMAP.md` に定義されたタスク群を、人間の個別の承認を挟まずに Jules CLI 経由で連続して自動発注・セッション作成する。
-2. **Phase 2: コード生成 & 自動テスト積載 (Jules & Antigravity)**
-   - Jules が各タスクのプログラムと単体テストを生成。
-   - Antigravity が各タスク完了ごとに自律してパッチを適用し、単体テスト (`node tests/store.test.js`) を全自動実行して品質をチェック・積載する。
+2. **Phase 2: コード生成 & メッセージ自動検収 (Jules & Antigravity)**
+   - Jules が各タスクのプログラム、単体テスト、セッションメッセージを生成。
+   - Antigravity は Jules CLI / API 経由で Jules からのログ・質問・完了確認メッセージ (`Needs clarification`) を自律監視・取得する。
+   - Jules が完了確認を求めている場合は、Antigravity が自動的に完了承認レスポンス (`Wrap it up / Approve`) を返答し、セッションを完了状態 (`Completed`) へ遷移させる。
+   - 各タスク完了ごとに自律してパッチを適用し、単体テスト (`node tests/store.test.js`) を全自動実行して品質をチェック・積載する。
 3. **Phase 3: 最終一括検収 & 人間一括承認 (Antigravity & 人間)**
    - 全タスク（または指定ブロック）が完了し、テストが100%グリーンであることを確認した上で、Antigravity が**総括検収レポート**を作成して人間に提示する。
    - 人間の明示的一括承認 (`[WRITE-I]`) を得て、一括で `main` ブランチへコミット・プッシュする。
