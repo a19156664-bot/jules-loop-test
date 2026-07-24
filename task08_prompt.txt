@@ -1,0 +1,22 @@
+Task 08: [NEW] タスクの優先度（Priority: High, Medium, Low）設定と表示・フィルタリング機能
+
+## 目的
+TODOタスクごとに優先度（high, medium, low）を設定・保存可能にし、UIでのラベル/バッジ表示および優先度別の操作を可能にする。
+
+## 完了条件 (DoD)
+- js/store.js の addTodo および updateTodo にて優先度（priority: 'high', 'medium', 'low'。デフォルトは 'medium'）を保存可能にし、updatePriority(id, priority) を実装すること
+- tests/store.test.js に updatePriority() および優先度保存の単体テスト（Test 7）を追加し、既存テスト（Test 1〜6）を含め全7件が正常パスすること
+- index.html および js/app.js に優先度選択UIおよびバッジ表示・切替機能を追加すること
+
+## 変更許可ファイル (スコープ)
+- index.html
+- style.css
+- js/store.js
+- js/app.js
+- tests/store.test.js
+
+## 変更禁止パス
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

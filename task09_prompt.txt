@@ -1,0 +1,22 @@
+Task 09: [NEW] 期限日（DueDate）設定と期限切れ（Overdue）自動判定・表示機能
+
+## 目的
+TODOタスクに完了期限日（dueDate: YYYY-MM-DD）を設定・保存可能にし、現在日付と比較して期限切れ状態を視覚的に強調表示する。
+
+## 完了条件 (DoD)
+- js/store.js の addTodo および updateTodo にて dueDate を保存・更新可能にし、タスクの期限切れ判定 helper `isOverdue(todo, currentDate)` メソッドを実装・提供すること
+- tests/store.test.js に dueDate の保存と isOverdue() 判定の単体テスト（Test 8）を追加し、既存テスト（Test 1〜7）を含め全8件が正常パスすること
+- index.html, js/app.js, style.css に期限日入力UIを追加し、期限切れタスクには赤色ハイライト等の視覚的警告表示を行うこと
+
+## 変更許可ファイル (スコープ)
+- index.html
+- style.css
+- js/store.js
+- js/app.js
+- tests/store.test.js
+
+## 変更禁止パス
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

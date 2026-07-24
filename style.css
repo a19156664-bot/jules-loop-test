@@ -116,14 +116,43 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--card-border);
   margin-bottom: 20px;
 }
 
+.filters-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .filters {
   display: flex;
   gap: 6px;
+}
+
+.priority-select {
+  background: #0f172a;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  outline: none;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.priority-select:focus {
+  border-color: var(--accent-color);
+}
+
+.filter-priority-select {
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 
 .filter-btn {
@@ -171,10 +200,71 @@ body {
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
   animation: fadeIn 0.25s ease-out;
+  position: relative;
 }
 
-.todo-item:hover {
-  border-color: #475569;
+.priority-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-left: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.priority-high {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger-color);
+}
+
+.priority-medium {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.priority-low {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success-color);
+}
+
+.due-date-input {
+  background: #0f172a;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  outline: none;
+  transition: var(--transition-fast);
+  color-scheme: dark;
+}
+
+.due-date-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.todo-item.overdue {
+  border-color: var(--danger-color);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.todo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.todo-due-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.todo-due-date.overdue-text {
+  color: var(--danger-color);
+  font-weight: 600;
 }
 
 .todo-item.completed .todo-text {

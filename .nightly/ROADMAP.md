@@ -62,3 +62,20 @@
   - [x] `tests/store.test.js` に `updateTodo()` の単体テスト（Test 6）を追加し、既存テスト（Test 1〜5）を含め全6件が正常パスすること
   - [x] `js/app.js` にて、タスクタイトルのダブルクリック（または編集UI）でタイトル入力変更を可能にし、`store.updateTodo()` 後にUI再描画を行うこと
 
+---
+
+### [x] Task 08: [NEW] タスクの優先度（Priority: High, Medium, Low）設定と表示・フィルタリング機能
+- **DoD (完了条件)**:
+  - [x] `js/store.js` の `addTodo` および `updateTodo` にて優先度（`priority`: `'high'`, `'medium'`, `'low'`。デフォルトは `'medium'`）を保存可能にし、`updatePriority(id, priority)` を実装すること
+  - [x] `tests/store.test.js` に `updatePriority()` および優先度保存の単体テスト（Test 7）を追加し、既存テスト（Test 1〜6）を含め全7件が正常パスすること
+  - [x] `index.html` および `js/app.js` に優先度選択UIおよびバッジ表示・ソート/フィルタ切替機能を追加すること
+
+---
+
+### [x] Task 09: [NEW] 期限日（DueDate）設定と期限切れ（Overdue）自動判定・表示機能
+- **DoD (完了条件)**:
+  - [x] `js/store.js` の `addTodo` および `updateTodo` にて期限日（`dueDate`: YYYY-MM-DD文字列またはnull）を保存可能にし、期限切れ判定 `isOverdue(todo, currentDate)` メソッドを実装・提供すること
+  - [x] `tests/store.test.js` に `dueDate` の保存と `isOverdue()` 判定の単体テスト（Test 8）を追加し、既存テスト（Test 1〜7）を含め全8件が正常パスすること
+  - [x] `index.html`, `js/app.js`, `style.css` にて期限日入力フィールドを追加し、期限切れタスクには視覚的警告表示（赤色ハイライト等）を行うこと
+
+

@@ -27,6 +27,12 @@
       <form id="todo-form" class="todo-form">
         <div class="input-wrapper">
           <input type="text" id="todo-input" placeholder="新しいタスクを入力..." autocomplete="off" required>
+          <select id="todo-priority" class="priority-select" title="優先度">
+            <option value="high">高 (High)</option>
+            <option value="medium" selected>中 (Medium)</option>
+            <option value="low">低 (Low)</option>
+          </select>
+          <input type="date" id="todo-due-date" class="due-date-input" title="期限日">
           <button type="submit" class="btn-add">
             <span>追加</span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -39,10 +45,18 @@
 
       <!-- Filter Controls -->
       <div class="controls-bar">
-        <div class="filters" id="filters">
-          <button type="button" class="filter-btn active" data-filter="all">すべて</button>
-          <button type="button" class="filter-btn" data-filter="active">未完了</button>
-          <button type="button" class="filter-btn" data-filter="completed">完了済み</button>
+        <div class="filters-container">
+          <div class="filters" id="filters">
+            <button type="button" class="filter-btn active" data-filter="all">すべて</button>
+            <button type="button" class="filter-btn" data-filter="active">未完了</button>
+            <button type="button" class="filter-btn" data-filter="completed">完了済み</button>
+          </div>
+          <select id="filter-priority" class="priority-select filter-priority-select">
+            <option value="all">すべての優先度</option>
+            <option value="high">Highのみ</option>
+            <option value="medium">Mediumのみ</option>
+            <option value="low">Lowのみ</option>
+          </select>
         </div>
         <div class="counter" id="todo-counter">0 件のタスク</div>
         <button type="button" id="btn-clear-completed" class="btn-clear-all">完了済みを削除</button>

@@ -75,6 +75,39 @@ function runTests() {
   assert.strictEqual(updatedItem.text, 'New Text');
   console.log('✅ Test 6 Passed: updateTodo()');
 
+  // Test 7: Update Priority
+  store.clearTodos();
+  const priorityTodo = store.addTodo('Priority Task');
+  assert.strictEqual(priorityTodo.priority, 'medium', 'Default priority should be medium');
+  const isPriorityUpdated = store.updatePriority(priorityTodo.id, 'high');
+  assert.strictEqual(isPriorityUpdated, true, 'updatePriority should return true');
+  const updatedPriorityTodo = store.getTodos().find(item => item.id === priorityTodo.id);
+  assert.strictEqual(updatedPriorityTodo.priority, 'high', 'Priority should be updated to high');
+  console.log('✅ Test 7 Passed: updatePriority()');
+
+  // Test 8: isOverdue() helper
+  const currentDate = new Date('2024-05-15');
+  
+  // Future date (not overdue)
+  const futureTodo = store.addTodo('Future', 'medium', '2024-05-20');
+  assert.strictEqual(store.isOverdue(futureTodo, currentDate), false);
+  
+  // Past date (overdue)
+  const pastTodo = store.addTodo('Past', 'medium', '2024-05-10');
+  assert.strictEqual(store.isOverdue(pastTodo, currentDate), true);
+  
+  // Same date (not overdue)
+  const sameTodo = store.addTodo('Same', 'medium', '2024-05-15');
+  assert.strictEqual(store.isOverdue(sameTodo, currentDate), false);
+  
+  // Completed past date (not overdue)
+  const completedPastTodo = store.addTodo('Completed Past', 'medium', '2024-05-10');
+  store.toggleTodo(completedPastTodo.id);
+  const updatedCompletedPastTodo = store.getTodos().find(t => t.id === completedPastTodo.id);
+  assert.strictEqual(store.isOverdue(updatedCompletedPastTodo, currentDate), false);
+
+  console.log('✅ Test 8 Passed: isOverdue() helper');
+
   console.log('🎉 All tests passed successfully!');
 }
 

@@ -6,14 +6,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const form = document.getElementById('todo-form');
   const input = document.getElementById('todo-input');
+  const priorityInput = document.getElementById('todo-priority');
+  const dateInput = document.getElementById('todo-due-date');
   const todoList = document.getElementById('todo-list');
   const emptyState = document.getElementById('empty-state');
   const counter = document.getElementById('todo-counter');
   const filterBtns = document.querySelectorAll('.filter-btn');
+  const filterPrioritySelect = document.getElementById('filter-priority');
   const btnClearAll = document.getElementById('btn-clear-all');
   const btnClearCompleted = document.getElementById('btn-clear-completed');
 
   let currentFilter = 'all';
+  let currentPriorityFilter = 'all';
 
   /**
    * Render TODO items based on current filter
@@ -22,10 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const todos = store.getTodos();
     let filteredTodos = todos;
 
+    // Filter by completion status
     if (currentFilter === 'active') {
       filteredTodos = todos.filter(t => !t.completed);
     } else if (currentFilter === 'completed') {
       filteredTodos = todos.filter(t => t.completed);
+    }
+
+    if (currentPriorityFilter !== 'all') {
+      filteredTodos = filteredTodos.filter(t => (t.priority || 'medium') === currentPriorityFilter);
     }
 
     // Toggle Empty State
@@ -37,16 +46,16 @@ document.addEventListener('DOMContentLoaded', () => {
       todoList.style.display = 'flex';
     }
 
-    // Update Counter
-    const activeCount = todos.filter(t => !t.completed).length;
-    counter.textContent = `${activeCount} 件の未完了タスク`;
-
     // Render List Items
     todoList.innerHTML = '';
     filteredTodos.forEach(todo => {
+      const isOverdue = store.isOverdue(todo, new Date());
       const li = document.createElement('li');
-      li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+      li.className = `todo-item ${todo.completed ? 'completed' : ''} ${isOverdue ? 'overdue' : ''}`.trim();
       li.dataset.id = todo.id;
+
+      const priorityLabel = todo.priority || 'medium';
+      const dueDateHtml = todo.dueDate ? `<span class="todo-due-date ${isOverdue ? 'overdue-text' : ''}">期限: ${escapeHtml(todo.dueDate)}</span>` : '';
 
       li.innerHTML = `
         <div class="todo-left">
@@ -57,7 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
               </svg>
             ` : ''}
           </div>
-          <span class="todo-text">${escapeHtml(todo.text)}</span>
+          <div class="todo-content">
+            <span class="todo-text">${escapeHtml(todo.text)}</span>
+            ${dueDateHtml}
+          </div>
+          <span class="priority-badge priority-${priorityLabel}" data-id="${todo.id}">${priorityLabel}</span>
         </div>
         <button type="button" class="btn-delete" title="削除">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -70,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Event Listener: Toggle Completed
       const checkbox = li.querySelector('.checkbox-custom');
       const todoText = li.querySelector('.todo-text');
+      const priorityBadge = li.querySelector('.priority-badge');
 
       const handleToggle = () => {
         store.toggleTodo(todo.id);
@@ -147,6 +161,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
+      // Event Listener: Priority Badge Click (cycle priorities)
+      priorityBadge.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const cycle = { 'high': 'medium', 'medium': 'low', 'low': 'high' };
+        const nextPriority = cycle[todo.priority || 'medium'];
+        store.updatePriority(todo.id, nextPriority);
+        render();
+      });
+
       // Event Listener: Delete
       const btnDelete = li.querySelector('.btn-delete');
       btnDelete.addEventListener('click', (e) => {
@@ -172,9 +195,11 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const text = input.value.trim();
+    const priority = priorityInput ? priorityInput.value : 'medium';
     if (text) {
-      store.addTodo(text);
+      store.addTodo(text, priority);
       input.value = '';
+      if (priorityInput) priorityInput.value = 'medium';
       render();
     }
   });
@@ -188,6 +213,14 @@ document.addEventListener('DOMContentLoaded', () => {
       render();
     });
   });
+
+  // Handle Priority Filter
+  if (filterPrioritySelect) {
+    filterPrioritySelect.addEventListener('change', (e) => {
+      currentPriorityFilter = e.target.value;
+      render();
+    });
+  }
 
   // Handle Clear All Button
   if (btnClearAll) {

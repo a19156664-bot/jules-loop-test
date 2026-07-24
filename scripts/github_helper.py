@@ -7,13 +7,16 @@ Provides helper functions to interface with GitHub via `gh` CLI.
 import subprocess
 import json
 import sys
+import os
 from typing import Dict, Any, List, Optional
 
 def run_gh_command(cmd_args: List[str]) -> Optional[str]:
-    """Execute a gh CLI command and return stdout string or None if failed."""
+    """Execute a gh CLI command using clean environment (removing invalid GITHUB_TOKEN if present)."""
     full_cmd = ["gh"] + cmd_args
+    env = os.environ.copy()
+    env.pop("GITHUB_TOKEN", None)  # Remove dummy/invalid GITHUB_TOKEN to force keyring authentication
     try:
-        res = subprocess.run(full_cmd, capture_output=True, text=True, check=True)
+        res = subprocess.run(full_cmd, capture_output=True, text=True, check=True, env=env)
         return res.stdout.strip()
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
         print(f"[GitHubHelper] Command failed or gh not installed: {full_cmd} -> {e}", file=sys.stderr)

@@ -35,13 +35,17 @@ class TodoStore {
   /**
    * Add a new todo item
    * @param {string} text 
+   * @param {string} priority - Priority of the task (high, medium, low)
+   * @param {string|null} dueDate - Due date in YYYY-MM-DD format
    * @returns {Object} The created todo item
    */
-  addTodo(text) {
+  addTodo(text, priority = 'medium', dueDate = null) {
     const todos = this.getTodos();
     const newTodo = {
       id: 'todo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
       text: text.trim(),
+      priority: priority,
+      dueDate: dueDate,
       completed: false,
       createdAt: Date.now()
     };
@@ -53,7 +57,7 @@ class TodoStore {
   /**
    * Toggle completed status of a todo item
    * @param {string} id 
-   * @returns {boolean} New status
+   * @returns {boolean} True if found and toggled, false otherwise
    */
   toggleTodo(id) {
     const todos = this.getTodos();
@@ -61,7 +65,7 @@ class TodoStore {
     if (todo) {
       todo.completed = !todo.completed;
       this.saveTodos(todos);
-      return todo.completed;
+      return true;
     }
     return false;
   }
@@ -70,17 +74,53 @@ class TodoStore {
    * Update the text of a todo item
    * @param {string} id 
    * @param {string} newText 
+   * @param {string} [newPriority] - Optional new priority
+   * @param {string|null} [newDueDate] - Optional new due date
    * @returns {boolean} True if updated, false if not found
    */
-  updateTodo(id, newText) {
+  updateTodo(id, newText, newPriority, newDueDate) {
     const todos = this.getTodos();
     const todo = todos.find(item => item.id === id);
     if (todo) {
-      todo.text = newText.trim();
+      if (newText !== undefined && newText !== null) todo.text = newText.trim();
+      if (newPriority) todo.priority = newPriority;
+      if (newDueDate !== undefined) todo.dueDate = newDueDate;
       this.saveTodos(todos);
       return true;
     }
     return false;
+  }
+
+  /**
+   * Update the priority of a todo item
+   * @param {string} id 
+   * @param {string} priority - Priority of the task (high, medium, low)
+   * @returns {boolean} True if updated, false if not found
+   */
+  updatePriority(id, priority) {
+    const todos = this.getTodos();
+    const todo = todos.find(item => item.id === id);
+    if (todo) {
+      todo.priority = priority;
+      this.saveTodos(todos);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Helper to check if a todo item is overdue
+   * @param {Object} todo 
+   * @param {Date|string} currentDate 
+   * @returns {boolean} True if overdue and not completed
+   */
+  isOverdue(todo, currentDate = new Date()) {
+    if (!todo || !todo.dueDate || todo.completed) return false;
+    const due = new Date(todo.dueDate);
+    due.setHours(0, 0, 0, 0);
+    const current = new Date(currentDate);
+    current.setHours(0, 0, 0, 0);
+    return due.getTime() < current.getTime();
   }
 
   /**
