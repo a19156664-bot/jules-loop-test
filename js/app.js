@@ -17,9 +17,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnClearCompleted = document.getElementById('btn-clear-completed');
 
   const themeSelect = document.getElementById('theme-select');
+  const fontSelect = document.getElementById('font-select');
 
   let currentFilter = 'all';
   let currentPriorityFilter = 'all';
+
+  // Font loading and handling
+  function applyFont(font) {
+    document.documentElement.setAttribute('data-font', font);
+    if (fontSelect) {
+      fontSelect.value = font;
+    }
+  }
+
+  const savedFont = store.getFont();
+  applyFont(savedFont);
+
+  if (fontSelect) {
+    fontSelect.addEventListener('change', (e) => {
+      const selectedFont = e.target.value;
+      store.saveFont(selectedFont);
+      applyFont(selectedFont);
+    });
+  }
 
   // Theme loading and handling
   function applyTheme(theme) {

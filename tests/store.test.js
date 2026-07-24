@@ -116,7 +116,6 @@ function runTests() {
   const keepActiveTodo = store.addTodo('Keep Me Active');
   
   // Simulate cancel by NOT calling clearTodos() or clearCompletedTodos()
-  // Data should be preserved
   let currentTodos = store.getTodos();
   assert.strictEqual(currentTodos.length, 2, 'Todos should remain when not deleted');
   
@@ -136,6 +135,16 @@ function runTests() {
   const savedTheme2 = store.getTheme();
   assert.strictEqual(savedTheme2, 'light', 'Saved theme should be light');
   console.log('✅ Test 10 Passed: saveTheme() and getTheme() return correctly updated theme');
+
+  // Test 11: Save and Get Font
+  store.saveFont('noto-sans-jp');
+  const savedFont = store.getFont();
+  assert.strictEqual(savedFont, 'noto-sans-jp', 'Saved font should be noto-sans-jp');
+  
+  store.saveFont('meiryo');
+  const savedFont2 = store.getFont();
+  assert.strictEqual(savedFont2, 'meiryo', 'Saved font should be meiryo');
+  console.log('✅ Test 11 Passed: saveFont() and getFont() return correctly updated font');
 
   console.log('🎉 All tests passed successfully!');
 }

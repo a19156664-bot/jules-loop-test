@@ -5,6 +5,33 @@ class TodoStore {
   constructor(storageKey = 'focus_todo_items') {
     this.storageKey = storageKey;
     this.themeStorageKey = 'focus_todo_theme';
+    this.fontStorageKey = 'focus_todo_font';
+  }
+
+  /**
+   * Fetch saved font from LocalStorage
+   * @returns {string} The saved font
+   */
+  getFont() {
+    try {
+      const font = localStorage.getItem(this.fontStorageKey);
+      return font || 'meiryo';
+    } catch (e) {
+      console.error('Failed to load font from localStorage:', e);
+      return 'meiryo';
+    }
+  }
+
+  /**
+   * Save font to LocalStorage
+   * @param {string} font ('meiryo', 'noto-sans-jp', 'source-han-sans')
+   */
+  saveFont(font) {
+    try {
+      localStorage.setItem(this.fontStorageKey, font);
+    } catch (e) {
+      console.error('Failed to save font to localStorage:', e);
+    }
   }
 
   /**

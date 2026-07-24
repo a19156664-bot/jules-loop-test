@@ -102,5 +102,23 @@
   - [x] `style.css` に CSS 変数テーマ（`:root`, `[data-theme="light"]`, `[data-theme="pastel-green"]`）を定義し、UIの色合いがスムーズに切り替わること
   - [x] `tests/store.test.js` にテーマ設定の保存・取得の単体テスト（Test 10）を追加し、全10件が正常パスすること
 
+---
+
+### [x] Task 13: [NEW] ライト・パステルグリーンテーマ時の入力文字可視性（コントラスト）およびボタンUI改善
+- **DoD (完了条件)**:
+  - [x] `style.css` にて入力フィールド（input[type="text"], input[type="date"], select）およびボタン（.btn-clear-all, .btn-clear-completed）の背景・文字・枠線色を全テーマ（dark, light, pastel-green）のCSS変数に完全統合すること
+  - [x] ライトモードおよびパステルグリーンモード選択時に入力文字・ラベル・選択肢がクッキリ100%可視化されること
+  - [x] 全削除・完了済み削除ボタンのデザインを統一・スタイリングすること
+  - [x] 既存の全10件の単体テストが継続して合格すること
+
+---
+
+### [x] Task 14: [NEW] フォント切替機能（メイリオ / Noto Sans JP / 源ノ角ゴシック）の実装
+- **DoD (完了条件)**:
+  - [x] `index.html` および `js/app.js` にフォント選択UI (#font-select) を追加し、選択フォント（メイリオ, Noto Sans JP, 源ノ角ゴシック）を `localStorage` に保存・復元すること
+  - [x] `style.css` にフォント定義を組み込み、選択したフォントが即座にアプリ全体へ反映されること
+  - [x] `tests/store.test.js` にフォント設定の保存・取得検証テスト（Test 11）を追加し、全11件の単体テストが正常パスすること
+
+
 
 
