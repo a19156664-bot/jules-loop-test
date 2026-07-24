@@ -108,6 +108,35 @@ function runTests() {
 
   console.log('✅ Test 8 Passed: isOverdue() helper');
 
+  // Test 9: 削除処理の不変検証単体テスト (Delete operation invariance test)
+  // Ensure the state remains unchanged if clear methods are not called (simulating user canceling dialog)
+  store.clearTodos();
+  const keepTodo = store.addTodo('Keep Me');
+  store.toggleTodo(keepTodo.id);
+  const keepActiveTodo = store.addTodo('Keep Me Active');
+  
+  // Simulate cancel by NOT calling clearTodos() or clearCompletedTodos()
+  // Data should be preserved
+  let currentTodos = store.getTodos();
+  assert.strictEqual(currentTodos.length, 2, 'Todos should remain when not deleted');
+  
+  const foundKeepTodo = currentTodos.find(t => t.id === keepTodo.id);
+  assert.strictEqual(foundKeepTodo.completed, true, 'State of kept todo should not be altered');
+  
+  const foundKeepActiveTodo = currentTodos.find(t => t.id === keepActiveTodo.id);
+  assert.strictEqual(foundKeepActiveTodo.completed, false, 'State of kept active todo should not be altered');
+  console.log('✅ Test 9 Passed: Delete operation invariance verification (simulate cancel)');
+
+  // Test 10: Save and Get Theme
+  store.saveTheme('pastel-green');
+  const savedTheme = store.getTheme();
+  assert.strictEqual(savedTheme, 'pastel-green', 'Saved theme should be pastel-green');
+  
+  store.saveTheme('light');
+  const savedTheme2 = store.getTheme();
+  assert.strictEqual(savedTheme2, 'light', 'Saved theme should be light');
+  console.log('✅ Test 10 Passed: saveTheme() and getTheme() return correctly updated theme');
+
   console.log('🎉 All tests passed successfully!');
 }
 

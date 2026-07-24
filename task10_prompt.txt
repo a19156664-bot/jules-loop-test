@@ -1,0 +1,21 @@
+Task 10: [NEW] 一括削除時の削除確認ダイアログ（Confirmation Window）機能の実装
+
+## 目的
+「すべて削除」および「完了済みを削除」ボタンが押下された際、誤操作によるデータ消失を防ぐため、事前にユーザーへ確認ダイアログ（画面表示確認）を挟み、OKが選択された場合のみ削除処理を実行するように改善する。
+
+## 完了条件 (DoD)
+- js/app.js にて「すべて削除」(#btn-clear-all) および「完了済みを削除」(#btn-clear-completed) ボタンの押下時に確認ダイアログ（window.confirm またはモーダルUI）を表示し、OKの場合のみ削除を実行すること
+- キャンセル（Cancel）選択時にはタスクが削除されず保持されること
+- tests/store.test.js に削除処理の不変検証単体テスト（Test 9）を追加し、既存テスト（Test 1〜8）を含め全9件が正常パスすること
+
+## 変更許可ファイル (スコープ)
+- index.html
+- style.css
+- js/app.js
+- tests/store.test.js
+
+## 変更禁止パス
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

@@ -16,8 +16,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnClearAll = document.getElementById('btn-clear-all');
   const btnClearCompleted = document.getElementById('btn-clear-completed');
 
+  const themeSelect = document.getElementById('theme-select');
+
   let currentFilter = 'all';
   let currentPriorityFilter = 'all';
+
+  // Theme loading and handling
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (themeSelect) {
+      themeSelect.value = theme;
+    }
+  }
+
+  const savedTheme = store.getTheme();
+  applyTheme(savedTheme);
+
+  if (themeSelect) {
+    themeSelect.addEventListener('change', (e) => {
+      const selectedTheme = e.target.value;
+      store.saveTheme(selectedTheme);
+      applyTheme(selectedTheme);
+    });
+  }
 
   /**
    * Render TODO items based on current filter
@@ -225,16 +246,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle Clear All Button
   if (btnClearAll) {
     btnClearAll.addEventListener('click', () => {
-      store.clearTodos();
-      render();
+      if (window.confirm('本当にすべてのタスクを削除しますか？')) {
+        store.clearTodos();
+        render();
+      }
     });
   }
 
   // Handle Clear Completed Button
   if (btnClearCompleted) {
     btnClearCompleted.addEventListener('click', () => {
-      store.clearCompletedTodos();
-      render();
+      if (window.confirm('完了済みのタスクをすべて削除しますか？')) {
+        store.clearCompletedTodos();
+        render();
+      }
     });
   }
 

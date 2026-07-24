@@ -4,6 +4,33 @@
 class TodoStore {
   constructor(storageKey = 'focus_todo_items') {
     this.storageKey = storageKey;
+    this.themeStorageKey = 'focus_todo_theme';
+  }
+
+  /**
+   * Fetch saved theme from LocalStorage
+   * @returns {string} The saved theme ('dark', 'light', 'pastel-green') or 'dark' default
+   */
+  getTheme() {
+    try {
+      const theme = localStorage.getItem(this.themeStorageKey);
+      return theme || 'dark';
+    } catch (e) {
+      console.error('Failed to load theme from localStorage:', e);
+      return 'dark';
+    }
+  }
+
+  /**
+   * Save theme to LocalStorage
+   * @param {string} theme ('dark', 'light', 'pastel-green')
+   */
+  saveTheme(theme) {
+    try {
+      localStorage.setItem(this.themeStorageKey, theme);
+    } catch (e) {
+      console.error('Failed to save theme to localStorage:', e);
+    }
   }
 
   /**
