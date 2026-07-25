@@ -24,7 +24,12 @@
 | **Task 11** | 入力フォームのUIレイアウト修正（「追加」ボタン枠内美整列） | Jules | Pass (Test 1~9) | 検収完了 | 30分タイマー監視＆自動検収・Session `13139174755100546567` |
 | **Task 12** | カラーテーマ切替機能（ダーク / ライト / パステルグリーン） | Jules | Pass (Test 1~10) | `main` 統合 | 30分タイマー監視＆自動検収・Session `7854771392766141273` |
 | **Task 13** | 入力文字可視性（コントラスト）およびボタンUI改善 | Jules | Pass (Test 1~10) | 検収完了 | 30分タイマー監視＆自動検収・Session `8880778638453298484` |
-| **Task 14** | フォント切替機能（メイリオ / Noto Sans JP / 源ノ角ゴシック） | Jules | Pass (Test 1~11) | 検収完了 | 30分タイマー監視＆自動検収・Session `10796955855255052128` |
+| **Task 14** | フォント切替機能（メイリオ / Noto Sans JP / 源ノ角ゴシック） | Jules | Pass (Test 1~11) | `main` 統合 | 30分タイマー監視＆自動検収・Session `10796955855255052128` |
+| **Task 15** | 4-Quadrant Eisenhower Matrix Data Model & Font Clean-up | Jules | Pass (Test 1~12) | 検収完了 | 30分タイマー監視＆自動検収・Session `9795886713874596832` |
+| **Task 16** | HTML5 Drag & Drop Implementation for Quadrants | Jules | Pass (Test 1~12) | 検収完了 | 30分タイマー監視＆自動検収・Session `14884084053353404076` |
+| **Task 17** | Negative Impression Improvement Sheet Modal with Print & Timer | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `15120677455947216698` |
+| **Task 18** | Interactive Quadrant Column Resizing | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `10091134432717859996` |
+| **Task 19** | Top-to-Bottom Window Blind Shutter Effect for Privacy | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `11317541287075953486` |
 
 ---
 
@@ -82,10 +87,13 @@
 
 ## 🔮 4. 今後のロードマップ & 次の展開案
 
-「パターンB（一括パイプラインモデル）」に基づき、以下の改善・機能追加タスクを連続投入中です。
+「パターンB（一括パイプラインモデル）」に基づき、Eisenhower Matrix 大規模バージョンアップ（Task 15 〜 Task 19）を順次自律発注中です。
 
-* **[ ] Task 13: ライト・パステルグリーンテーマ時の入力文字可視性（コントラスト）およびボタンUI改善**
-* **[ ] Task 14: フォント切替機能（メイリオ / Noto Sans JP / 源ノ角ゴシック）**
+* **[ ] Task 15: 4-Quadrant Eisenhower Matrix Data Model & Font Clean-up (工程 ①, ⑤)**
+* **[ ] Task 16: HTML5 Drag & Drop Implementation for Quadrants (工程 ②)**
+* **[ ] Task 17: Negative Impression Improvement Sheet Modal with Print & Timer (工程 ③)**
+* **[ ] Task 18: Interactive Quadrant Column Resizing (工程 ④)**
+* **[ ] Task 19: Top-to-Bottom Window Blind Shutter Effect for Privacy (工程 ⑥)**
 
 ---
 

@@ -119,6 +119,45 @@
   - [x] `style.css` にフォント定義を組み込み、選択したフォントが即座にアプリ全体へ反映されること
   - [x] `tests/store.test.js` にフォント設定の保存・取得検証テスト（Test 11）を追加し、全11件の単体テストが正常パスすること
 
+---
+
+## 🚀 Eisenhower Matrix 大規模バージョンアップ (Task 15 〜 Task 19)
+
+### [x] Task 15: [NEW] 4-Quadrant Eisenhower Matrix Data Model & Font Clean-up (工程 ①, ⑤)
+- **DoD (完了条件)**:
+  - [x] `js/store.js` のデータモデルを4象限 (`do_first`, `schedule`, `delegate`, `memo`) 構造へ拡張し、完了タスクを「タスク完了箱」へ移動・表示制御すること
+  - [x] `index.html`, `style.css`, `js/app.js` にてフォント切替UIを削除し、アイゼンハワーマトリクス4象限カードレイアウトを構築すること
+  - [x] `tests/store.test.js` に4象限移行の単体テスト（Test 12）を追加し、全テストがパスすること
+
+---
+
+### [x] Task 16: [NEW] HTML5 Drag & Drop Implementation for Quadrants (工程 ②)
+- **DoD (完了条件)**:
+  - [x] 象限内でのタスクの上下並び替え、および象限間（Do First ⇄ Schedule ⇄ Delegate ⇄ Memo）のドラッグ＆ドロップ移動を実装すること
+  - [x] ドラッグ中の視覚的ハイライトアニメーションおよび移動後の `store` 自動保存を実装すること
+
+---
+
+### [x] Task 17: [NEW] Negative Impression Improvement Sheet Modal with Print & Timer (工程 ③)
+- **DoD (完了条件)**:
+  - [x] タスククリックで「ネガティブ想起改善シート」モーダルを表示し、No 1-10 の明示化内容・困難度/満足度スコア入力、5秒後行動タイマー、印刷機能を実装すること
+  - [x] 入力データをタスクごとに LocalStorage へ永続保存・復元可能にすること
+  - [x] `tests/store.test.js` にシートデータ保存テスト（Test 13）を追加し、全テストがパスすること
+
+---
+
+### [x] Task 18: [NEW] Interactive Quadrant Column Resizing (工程 ④)
+- **DoD (完了条件)**:
+  - [x] 4つの象限カラム間にマウスドラッグ用のリサイザーバーを配置し、ユーザーが象限の横幅を動的に拡大・縮小調整可能にすること
+
+---
+
+### [x] Task 19: [NEW] Top-to-Bottom Window Blind Shutter Effect for Privacy (工程 ⑥)
+- **DoD (完了条件)**:
+  - [x] 各象限のヘッダーに「ブラインドボタン」を配置し、押下時に窓のブラインドのように上から下へ滑らかにカバーが降りてタスク内容をお洒落に伏せるアニメーションを実装すること
+  - [x] 再押下でブラインドが巻き上がり、タスク一覧が復元表示されること
+
+
 
 
 

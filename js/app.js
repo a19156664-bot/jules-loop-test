@@ -6,39 +6,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const form = document.getElementById('todo-form');
   const input = document.getElementById('todo-input');
+  const quadrantInput = document.getElementById('todo-quadrant');
   const priorityInput = document.getElementById('todo-priority');
   const dateInput = document.getElementById('todo-due-date');
-  const todoList = document.getElementById('todo-list');
-  const emptyState = document.getElementById('empty-state');
+  
+  const listDoFirst = document.getElementById('list-do-first');
+  const listSchedule = document.getElementById('list-schedule');
+  const listDelegate = document.getElementById('list-delegate');
+  const listMemo = document.getElementById('list-memo');
+  const listCompleted = document.getElementById('list-completed');
+
   const counter = document.getElementById('todo-counter');
   const filterBtns = document.querySelectorAll('.filter-btn');
   const filterPrioritySelect = document.getElementById('filter-priority');
   const btnClearAll = document.getElementById('btn-clear-all');
   const btnClearCompleted = document.getElementById('btn-clear-completed');
 
+  const modalNegativeSheet = document.getElementById('modal-negative-sheet');
+  const sheetTaskName = document.getElementById('sheet-task-name');
+  const sheetRowsContainer = document.getElementById('sheet-rows-container');
+  const btnSaveClose = document.getElementById('btn-save-sheet');
+  const btnPrint = document.getElementById('btn-print-sheet');
+  const btnTimer = document.getElementById('btn-action-timer');
+
+  let currentSheetTodoId = null;
+  let timerInterval = null;
+
   const themeSelect = document.getElementById('theme-select');
-  const fontSelect = document.getElementById('font-select');
+  
+  const btnCompletedDrawer = document.getElementById('btn-completed-drawer');
+  const completedDrawer = document.getElementById('completed-drawer');
+  const btnCloseDrawer = document.getElementById('btn-close-drawer');
 
   let currentFilter = 'all';
   let currentPriorityFilter = 'all';
 
-  // Font loading and handling
-  function applyFont(font) {
-    document.documentElement.setAttribute('data-font', font);
-    if (fontSelect) {
-      fontSelect.value = font;
+  // Completed Drawer Toggle
+  let isDrawerOpen = false;
+  
+  function toggleDrawer() {
+    isDrawerOpen = !isDrawerOpen;
+    if (isDrawerOpen) {
+      completedDrawer.classList.add('open');
+    } else {
+      completedDrawer.classList.remove('open');
     }
   }
 
-  const savedFont = store.getFont();
-  applyFont(savedFont);
+  if (btnCompletedDrawer) {
+    btnCompletedDrawer.addEventListener('click', toggleDrawer);
+  }
 
-  if (fontSelect) {
-    fontSelect.addEventListener('change', (e) => {
-      const selectedFont = e.target.value;
-      store.saveFont(selectedFont);
-      applyFont(selectedFont);
-    });
+  if (btnCloseDrawer) {
+    btnCloseDrawer.addEventListener('click', toggleDrawer);
   }
 
   // Theme loading and handling
@@ -67,6 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const todos = store.getTodos();
     let filteredTodos = todos;
 
+    // Update Counter
+    if (counter) {
+      counter.textContent = `${todos.length} 件のタスク`;
+    }
+
     // Filter by completion status
     if (currentFilter === 'active') {
       filteredTodos = todos.filter(t => !t.completed);
@@ -78,22 +103,30 @@ document.addEventListener('DOMContentLoaded', () => {
       filteredTodos = filteredTodos.filter(t => (t.priority || 'medium') === currentPriorityFilter);
     }
 
-    // Toggle Empty State
-    if (filteredTodos.length === 0) {
-      emptyState.style.display = 'flex';
-      todoList.style.display = 'none';
-    } else {
-      emptyState.style.display = 'none';
-      todoList.style.display = 'flex';
-    }
+    // Clear lists
+    if (listDoFirst) listDoFirst.innerHTML = '';
+    if (listSchedule) listSchedule.innerHTML = '';
+    if (listDelegate) listDelegate.innerHTML = '';
+    if (listMemo) listMemo.innerHTML = '';
+    if (listCompleted) listCompleted.innerHTML = '';
 
-    // Render List Items
-    todoList.innerHTML = '';
     filteredTodos.forEach(todo => {
       const isOverdue = store.isOverdue(todo, new Date());
       const li = document.createElement('li');
       li.className = `todo-item ${todo.completed ? 'completed' : ''} ${isOverdue ? 'overdue' : ''}`.trim();
       li.dataset.id = todo.id;
+      li.draggable = true;
+
+      // Drag and Drop event listeners for task item
+      li.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', todo.id);
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => li.classList.add('dragging'), 0);
+      });
+
+      li.addEventListener('dragend', () => {
+        li.classList.remove('dragging');
+      });
 
       const priorityLabel = todo.priority || 'medium';
       const dueDateHtml = todo.dueDate ? `<span class="todo-due-date ${isOverdue ? 'overdue-text' : ''}">期限: ${escapeHtml(todo.dueDate)}</span>` : '';
@@ -112,6 +145,14 @@ document.addEventListener('DOMContentLoaded', () => {
             ${dueDateHtml}
           </div>
           <span class="priority-badge priority-${priorityLabel}" data-id="${todo.id}">${priorityLabel}</span>
+          ${!todo.completed ? `
+          <select class="quadrant-select" data-id="${todo.id}">
+            <option value="do_first" ${todo.quadrant === 'do_first' ? 'selected' : ''}>Do First</option>
+            <option value="schedule" ${todo.quadrant === 'schedule' ? 'selected' : ''}>Schedule</option>
+            <option value="delegate" ${todo.quadrant === 'delegate' ? 'selected' : ''}>Delegate</option>
+            <option value="memo" ${todo.quadrant === 'memo' ? 'selected' : ''}>Memo</option>
+          </select>
+          ` : ''}
         </div>
         <button type="button" class="btn-delete" title="削除">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -133,6 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
       checkbox.addEventListener('click', handleToggle);
       
       // Inline Editing
+      // Click text to open Negative Impression Improvement Sheet Modal
+      todoText.addEventListener('click', () => {
+        openNegativeSheetModal(todo);
+      });
+      
       let isEditing = false;
       todoText.addEventListener('dblclick', () => {
         if (todo.completed || isEditing) return; // Don't edit if completed
@@ -202,6 +248,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
+      // Event Listener: Quadrant Change
+      const quadrantSelect = li.querySelector('.quadrant-select');
+      if (quadrantSelect) {
+        quadrantSelect.addEventListener('change', (e) => {
+          store.updateQuadrant(todo.id, e.target.value);
+          render();
+        });
+      }
+
       // Event Listener: Priority Badge Click (cycle priorities)
       priorityBadge.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -219,9 +274,102 @@ document.addEventListener('DOMContentLoaded', () => {
         render();
       });
 
-      todoList.appendChild(li);
+      if (todo.completed) {
+        if (listCompleted) listCompleted.appendChild(li);
+      } else {
+        const quad = todo.quadrant || 'do_first';
+        if (quad === 'do_first' && listDoFirst) listDoFirst.appendChild(li);
+        else if (quad === 'schedule' && listSchedule) listSchedule.appendChild(li);
+        else if (quad === 'delegate' && listDelegate) listDelegate.appendChild(li);
+        else if (quad === 'memo' && listMemo) listMemo.appendChild(li);
+        else if (listDoFirst) listDoFirst.appendChild(li); // fallback
+      }
     });
   }
+
+  // Setup Drag and Drop for Quadrant Columns
+  const quadrantColumns = document.querySelectorAll('.quadrant-column');
+  quadrantColumns.forEach(column => {
+    column.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      column.classList.add('drag-over');
+    });
+
+    column.addEventListener('dragleave', () => {
+      column.classList.remove('drag-over');
+    });
+
+    column.addEventListener('drop', (e) => {
+      e.preventDefault();
+      column.classList.remove('drag-over');
+      const todoId = e.dataTransfer.getData('text/plain');
+      const newQuadrant = column.dataset.quadrant;
+
+      if (todoId && newQuadrant) {
+        store.updateQuadrant(todoId, newQuadrant);
+        render();
+      }
+    });
+  });
+
+  // Setup Blind Toggle for Quadrants
+  const blindBtns = document.querySelectorAll('.btn-blind');
+  blindBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const col = btn.closest('.quadrant-column');
+      if (col) {
+        col.classList.toggle('blind-active');
+      }
+    });
+  });
+  const resizers = document.querySelectorAll('.column-resizer');
+  resizers.forEach(resizer => {
+    let isResizing = false;
+    let startX = 0;
+    let leftColWidth = 0;
+    let rightColWidth = 0;
+    let leftCol = null;
+    let rightCol = null;
+
+    resizer.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      resizer.classList.add('resizing');
+      startX = e.clientX;
+
+      leftCol = resizer.previousElementSibling;
+      rightCol = resizer.nextElementSibling;
+
+      if (leftCol && rightCol) {
+        leftColWidth = leftCol.getBoundingClientRect().width;
+        rightColWidth = rightCol.getBoundingClientRect().width;
+      }
+
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing || !leftCol || !rightCol) return;
+
+      const dx = e.clientX - startX;
+      const newLeftWidth = Math.max(140, leftColWidth + dx);
+      const newRightWidth = Math.max(140, rightColWidth - dx);
+
+      leftCol.style.flex = `0 0 ${newLeftWidth}px`;
+      rightCol.style.flex = `0 0 ${newRightWidth}px`;
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        resizer.classList.remove('resizing');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+    });
+  });
 
   /**
    * Escape HTML to prevent XSS
@@ -237,10 +385,15 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const text = input.value.trim();
     const priority = priorityInput ? priorityInput.value : 'medium';
+    const quadrant = quadrantInput ? quadrantInput.value : 'do_first';
+    const dueDate = dateInput && dateInput.value ? dateInput.value : null;
+
     if (text) {
-      store.addTodo(text, priority);
+      store.addTodo(text, priority, dueDate, quadrant);
       input.value = '';
       if (priorityInput) priorityInput.value = 'medium';
+      if (dateInput) dateInput.value = '';
+      if (quadrantInput) quadrantInput.value = 'do_first';
       render();
     }
   });
@@ -282,6 +435,89 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  function openNegativeSheetModal(todo) {
+    currentSheetTodoId = todo.id;
+    sheetTaskName.textContent = `タスク: ${todo.text}`;
+    
+    const sheetData = todo.negativeSheet || Array.from({ length: 10 }, (_, i) => ({
+      no: i + 1,
+      description: '',
+      expectedDifficulty: '',
+      expectedSatisfaction: '',
+      actualDifficulty: '',
+      actualSatisfaction: ''
+    }));
+
+    sheetRowsContainer.innerHTML = '';
+    sheetData.forEach((row, idx) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${row.no}</td>
+        <td><input type="text" class="sheet-desc" value="${escapeHtml(row.description || '')}" placeholder="内容を明示化..."></td>
+        <td><input type="number" class="sheet-ed" min="1" max="10" value="${escapeHtml(row.expectedDifficulty || '')}" placeholder="1-10"></td>
+        <td><input type="number" class="sheet-es" min="1" max="10" value="${escapeHtml(row.expectedSatisfaction || '')}" placeholder="1-10"></td>
+        <td><input type="number" class="sheet-ad" min="1" max="10" value="${escapeHtml(row.actualDifficulty || '')}" placeholder="1-10"></td>
+        <td><input type="number" class="sheet-as" min="1" max="10" value="${escapeHtml(row.actualSatisfaction || '')}" placeholder="1-10"></td>
+      `;
+      sheetRowsContainer.appendChild(tr);
+    });
+
+    // Reset action timer state
+    if (timerInterval) clearInterval(timerInterval);
+    btnTimer.disabled = false;
+    btnTimer.textContent = '⚡ 5秒後に行動';
+
+    modalNegativeSheet.style.display = 'flex';
+  }
+
+  function saveNegativeSheet() {
+    if (!currentSheetTodoId) return;
+
+    const rows = sheetRowsContainer.querySelectorAll('tr');
+    const newSheetData = Array.from(rows).map((tr, idx) => ({
+      no: idx + 1,
+      description: tr.querySelector('.sheet-desc').value,
+      expectedDifficulty: tr.querySelector('.sheet-ed').value,
+      expectedSatisfaction: tr.querySelector('.sheet-es').value,
+      actualDifficulty: tr.querySelector('.sheet-ad').value,
+      actualSatisfaction: tr.querySelector('.sheet-as').value
+    }));
+
+    store.updateNegativeSheet(currentSheetTodoId, newSheetData);
+  }
+
+  btnSaveClose.addEventListener('click', () => {
+    saveNegativeSheet();
+    modalNegativeSheet.style.display = 'none';
+    currentSheetTodoId = null;
+  });
+
+  btnPrint.addEventListener('click', () => {
+    window.print();
+  });
+
+  btnTimer.addEventListener('click', () => {
+    if (btnTimer.disabled) return;
+    
+    btnTimer.disabled = true;
+    let timeLeft = 5;
+    btnTimer.textContent = `${timeLeft}s...`;
+    
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      if (timeLeft > 0) {
+        btnTimer.textContent = `${timeLeft}s...`;
+      } else {
+        clearInterval(timerInterval);
+        btnTimer.textContent = '⚡ Action!';
+        setTimeout(() => {
+          btnTimer.textContent = '⚡ 5秒後に行動';
+          btnTimer.disabled = false;
+        }, 2000);
+      }
+    }, 1000);
+  });
 
   // Initial Render
   render();

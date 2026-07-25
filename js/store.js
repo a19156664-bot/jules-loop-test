@@ -91,21 +91,52 @@ class TodoStore {
    * @param {string} text 
    * @param {string} priority - Priority of the task (high, medium, low)
    * @param {string|null} dueDate - Due date in YYYY-MM-DD format
+   * @param {string} quadrant - Quadrant of the task (do_first, schedule, delegate, memo)
    * @returns {Object} The created todo item
    */
-  addTodo(text, priority = 'medium', dueDate = null) {
+  addTodo(text, priority = 'medium', dueDate = null, quadrant = 'do_first') {
     const todos = this.getTodos();
+
+    // Initialize empty negative sheet with 10 rows
+    const emptySheet = Array.from({ length: 10 }, (_, i) => ({
+      no: i + 1,
+      description: '',
+      expectedDifficulty: '',
+      expectedSatisfaction: '',
+      actualDifficulty: '',
+      actualSatisfaction: ''
+    }));
+
     const newTodo = {
       id: 'todo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
       text: text.trim(),
       priority: priority,
       dueDate: dueDate,
+      quadrant: quadrant,
       completed: false,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      negativeSheet: emptySheet
     };
-    todos.unshift(newTodo);
+    todos.push(newTodo);
     this.saveTodos(todos);
     return newTodo;
+  }
+
+  /**
+   * Update the negative sheet data of a todo item
+   * @param {string} id 
+   * @param {Array} sheetData 
+   * @returns {boolean} True if updated, false if not found
+   */
+  updateNegativeSheet(id, sheetData) {
+    const todos = this.getTodos();
+    const todo = todos.find(item => item.id === id);
+    if (todo) {
+      todo.negativeSheet = sheetData;
+      this.saveTodos(todos);
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -130,15 +161,34 @@ class TodoStore {
    * @param {string} newText 
    * @param {string} [newPriority] - Optional new priority
    * @param {string|null} [newDueDate] - Optional new due date
+   * @param {string} [newQuadrant] - Optional new quadrant
    * @returns {boolean} True if updated, false if not found
    */
-  updateTodo(id, newText, newPriority, newDueDate) {
+  updateTodo(id, newText, newPriority, newDueDate, newQuadrant) {
     const todos = this.getTodos();
     const todo = todos.find(item => item.id === id);
     if (todo) {
       if (newText !== undefined && newText !== null) todo.text = newText.trim();
       if (newPriority) todo.priority = newPriority;
       if (newDueDate !== undefined) todo.dueDate = newDueDate;
+      if (newQuadrant) todo.quadrant = newQuadrant;
+      this.saveTodos(todos);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Update the quadrant of a todo item
+   * @param {string} id 
+   * @param {string} quadrant - Quadrant of the task (do_first, schedule, delegate, memo)
+   * @returns {boolean} True if updated, false if not found
+   */
+  updateQuadrant(id, quadrant) {
+    const todos = this.getTodos();
+    const todo = todos.find(item => item.id === id);
+    if (todo) {
+      todo.quadrant = quadrant;
       this.saveTodos(todos);
       return true;
     }
@@ -156,6 +206,23 @@ class TodoStore {
     const todo = todos.find(item => item.id === id);
     if (todo) {
       todo.priority = priority;
+      this.saveTodos(todos);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Update the quadrant of a todo item
+   * @param {string} id 
+   * @param {string} quadrant - Quadrant of the task (do_first, schedule, delegate, memo)
+   * @returns {boolean} True if updated, false if not found
+   */
+  updateQuadrant(id, quadrant) {
+    const todos = this.getTodos();
+    const todo = todos.find(item => item.id === id);
+    if (todo) {
+      todo.quadrant = quadrant;
       this.saveTodos(todos);
       return true;
     }

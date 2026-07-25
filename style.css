@@ -1,23 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap');
 
-:root {
-  --app-font: 'Meiryo', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-[data-font="meiryo"] {
-  --app-font: 'Meiryo', 'Inter', sans-serif;
-}
-
-[data-font="noto-sans-jp"] {
-  --app-font: 'Noto Sans JP', sans-serif;
-}
-
-[data-font="source-han-sans"] {
-  --app-font: 'Source Han Sans', 'Noto Sans CJK JP', 'Noto Sans JP', sans-serif;
-}
-
 :root, [data-theme="dark"] {
   color-scheme: dark;
+  --app-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --bg-color: #0f172a;
   --card-bg: #1e293b;
   --card-border: #334155;
@@ -95,12 +80,14 @@ body {
 
 .app-container {
   width: 100%;
-  max-width: 560px;
+  max-width: 1200px; /* Increased for 4 columns */
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
   padding: 32px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
 }
 
 .app-header {
@@ -291,14 +278,25 @@ body {
 .todo-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background-color: var(--input-bg);
+  gap: 12px;
+  background: var(--card-bg);
   border: 1px solid var(--card-border);
   padding: 12px 16px;
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
   animation: fadeIn 0.25s ease-out;
   position: relative;
+  cursor: grab;
+}
+
+.todo-item:active {
+  cursor: grabbing;
+}
+
+.todo-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .priority-badge {
@@ -352,6 +350,238 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.quadrant-column.drag-over {
+  background: var(--accent-glow);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.quadrant-select {
+  background-color: transparent;
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 2px;
+  outline: none;
+  margin-left: 8px;
+}
+
+/* Eisenhower Matrix Layout */
+.matrix-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .matrix-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .quadrants-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 4px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+
+.quadrant-column {
+  flex: 1 1 0px;
+  min-width: 180px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px dashed var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 250px;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-blind {
+  background: transparent;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: transform var(--transition-fast), background var(--transition-fast);
+  z-index: 15;
+}
+
+.btn-blind:hover {
+  transform: scale(1.15);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.blind-shutter {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 40px);
+  background: repeating-linear-gradient(
+    0deg,
+    var(--card-bg),
+    var(--card-bg) 14px,
+    var(--card-border) 14px,
+    var(--card-border) 16px
+  );
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.quadrant-column.blind-active .blind-shutter {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.blind-content {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.column-resizer {
+  width: 8px;
+  cursor: col-resize;
+  user-select: none;
+  border-radius: 4px;
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.column-resizer::after {
+  content: '';
+  width: 2px;
+  height: 30px;
+  background: var(--card-border);
+  border-radius: 1px;
+  transition: background var(--transition-fast);
+}
+
+.column-resizer:hover::after,
+.column-resizer.resizing::after {
+  background: var(--accent-color);
+  width: 3px;
+}  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.quadrant-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quadrant-title span {
+  font-size: 0.75rem;
+  font-weight: normal;
+  color: var(--text-muted);
+}
+
+.quadrant-do-first .quadrant-title {
+  border-bottom-color: var(--danger-color);
+  color: var(--danger-color);
+}
+
+.quadrant-schedule .quadrant-title {
+  border-bottom-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.quadrant-delegate .quadrant-title {
+  border-bottom-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.quadrant-memo .quadrant-title {
+  border-bottom-color: var(--success-color);
+  color: var(--success-color);
+}
+
+.matrix-quadrant .todo-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Completed Drawer */
+.completed-drawer {
+  position: absolute;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  background: var(--card-bg);
+  border-left: 1px solid var(--card-border);
+  box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+  padding: 24px;
+  transition: right 0.3s ease;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.completed-drawer.open {
+  right: 0;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.drawer-header h2 {
+  font-size: 1.2rem;
+  color: var(--text-main);
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.btn-close:hover {
+  color: var(--danger-color);
 }
 
 .todo-due-date {
@@ -449,4 +679,175 @@ body {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 16px;
+}
+
+.modal-title-group h2 {
+  font-size: 1.25rem;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.modal-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-timer,
+.btn-print,
+.btn-save-close {
+  background: var(--input-bg);
+  color: var(--text-main);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-timer:hover,
+.btn-print:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-save-close {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+}
+
+.btn-save-close:hover {
+  background: var(--accent-hover);
+}
+
+.negative-sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.negative-sheet-table th,
+.negative-sheet-table td {
+  border: 1px solid var(--card-border);
+  padding: 8px;
+  text-align: center;
+}
+
+.negative-sheet-table th {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+[data-theme="light"] .negative-sheet-table th,
+[data-theme="pastel-green"] .negative-sheet-table th {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.negative-sheet-table td input[type="text"],
+.negative-sheet-table td input[type="number"] {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  outline: none;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.negative-sheet-table td input[type="text"] {
+  text-align: left;
+}
+
+.negative-sheet-table td input:focus {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .negative-sheet-table td input:focus,
+[data-theme="pastel-green"] .negative-sheet-table td input:focus {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #modal-negative-sheet,
+  #modal-negative-sheet * {
+    visibility: visible;
+  }
+  #modal-negative-sheet {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: white !important;
+    padding: 0;
+    margin: 0;
+  }
+  .modal-content {
+    box-shadow: none;
+    border: none;
+    width: 100%;
+    max-width: none;
+  }
+  .no-print {
+    display: none !important;
+  }
+  
+  :root, [data-theme="dark"], [data-theme="light"], [data-theme="pastel-green"] {
+    --text-main: #000;
+    --text-muted: #333;
+    --card-border: #000;
+  }
+  .negative-sheet-table th,
+  .negative-sheet-table td,
+  .negative-sheet-table td input {
+    color: #000 !important;
+  }
+  .negative-sheet-table th {
+    background: #eee !important;
+  }
 }

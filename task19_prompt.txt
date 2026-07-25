@@ -1,0 +1,21 @@
+Task 19: [NEW] Top-to-Bottom Window Blind Shutter Effect for Privacy
+
+## Objective
+Implement an interactive "Window Blind" shutter feature on each quadrant header so users can click a blind button (`.btn-blind`) to elegantly cover/hide quadrant task items with a smooth top-to-bottom sliding shutter animation (`transform: translateY` transition).
+
+## DoD (Definition of Done)
+1. In `index.html`, add a blind toggle button (`.btn-blind` with blind/eye icon) inside each of the 4 quadrant column headers. Add a blind shutter overlay container (`.blind-shutter`) to each quadrant column.
+2. In `style.css`, style the `.blind-shutter` as an elegant glassmorphism/patterned shutter cover that slides down from top to bottom (`transform: translateY(-100%)` to `translateY(0)` with a smooth `cubic-bezier` 0.4s transition) when active.
+3. In `js/app.js`, attach click event listeners to `.btn-blind` buttons to toggle the `.blind-active` class on the parent quadrant column, dropping/raising the window blind cover smoothly.
+4. Ensure all 13 existing unit tests in `tests/store.test.js` continue to pass cleanly (100% green).
+
+## Allowed Scope
+- index.html
+- style.css
+- js/app.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

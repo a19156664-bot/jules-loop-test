@@ -1,0 +1,22 @@
+Task 16: [NEW] HTML5 Drag & Drop Implementation for Quadrants
+
+## Objective
+Implement smooth HTML5 Drag & Drop functionality to allow users to grab a task card and reorder it within the same quadrant column, or drag and drop it into a different quadrant column (e.g. from "Do First" to "Schedule" or "Delegate" or "Memo").
+
+## DoD (Definition of Done)
+1. In `index.html` and `js/app.js`, add `draggable="true"` and drag event listeners (`dragstart`, `dragover`, `dragleave`, `drop`, `dragend`) to task item elements and quadrant column containers.
+2. Provide CSS visual feedback in `style.css` during drag operations (e.g., opacity reduction on the dragged item, drop target column border glow/highlight).
+3. In `js/store.js` or `js/app.js`, update the task's `quadrant` property upon drop and persist the updated state to LocalStorage.
+4. Ensure all 12 existing unit tests in `tests/store.test.js` continue to pass cleanly (100% green).
+
+## Allowed Scope
+- index.html
+- style.css
+- js/store.js
+- js/app.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

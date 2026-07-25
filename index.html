@@ -23,11 +23,7 @@
         <p class="subtitle">シンプルで高効率なタスク管理</p>
       </div>
       <div class="theme-selector" style="display: flex; gap: 10px;">
-        <select id="font-select" class="priority-select" title="フォント選択">
-          <option value="meiryo">メイリオ</option>
-          <option value="noto-sans-jp">Noto Sans JP</option>
-          <option value="source-han-sans">源ノ角ゴシック</option>
-        </select>
+        <button id="btn-completed-drawer" class="btn-clear-all" title="完了タスク">完了タスク</button>
         <select id="theme-select" class="priority-select" title="テーマ選択">
           <option value="dark">ダークモード</option>
           <option value="light">ホワイトモード</option>
@@ -42,6 +38,12 @@
         <div class="input-wrapper">
           <input type="text" id="todo-input" class="text-input" placeholder="新しいタスクを入力..." autocomplete="off" required>
           <div class="input-actions">
+            <select id="todo-quadrant" class="priority-select" title="象限">
+              <option value="do_first" selected>Do First (今すぐ)</option>
+              <option value="schedule">Schedule (計画)</option>
+              <option value="delegate">Delegate (任せる)</option>
+              <option value="memo">Memo (やらない)</option>
+            </select>
             <select id="todo-priority" class="priority-select" title="優先度">
               <option value="high">高 (High)</option>
               <option value="medium" selected>中 (Medium)</option>
@@ -79,20 +81,90 @@
         <button type="button" id="btn-clear-all" class="btn-clear-all">全削除</button>
       </div>
 
-      <!-- Task List Container -->
-      <ul id="todo-list" class="todo-list">
-        <!-- JS will populate task items here -->
-      </ul>
-
-      <!-- Empty State Placeholder -->
-      <div id="empty-state" class="empty-state">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M8 12h8"></path>
-        </svg>
-        <p>タスクがありません。新しいタスクを追加してください。</p>
+      <!-- Eisenhower Matrix Container -->
+      <div class="matrix-container" id="matrix-container">
+        <div id="quadrants-container" class="quadrants-container">
+        <div class="quadrant-column" data-quadrant="do_first">
+          <div class="quadrant-header-row" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="quadrant-title" style="color: #ef4444; margin: 0;">Do First (重要かつ緊急)</h2>
+            <button class="btn-blind" title="ブラインド切り替え">🕶️</button>
+          </div>
+          <ul id="todo-list-do_first" class="todo-list quadrant-list"></ul>
+          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中</div></div>
+        </div>
+        <div class="column-resizer" data-resizer="0"></div>
+        <div class="quadrant-column" data-quadrant="schedule">
+          <div class="quadrant-header-row" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="quadrant-title" style="color: #3b82f6; margin: 0;">Schedule (重要だが非緊急)</h2>
+            <button class="btn-blind" title="ブラインド切り替え">🕶️</button>
+          </div>
+          <ul id="todo-list-schedule" class="todo-list quadrant-list"></ul>
+          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中</div></div>
+        </div>
+        <div class="column-resizer" data-resizer="1"></div>
+        <div class="quadrant-column" data-quadrant="delegate">
+          <div class="quadrant-header-row" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="quadrant-title" style="color: #eab308; margin: 0;">Delegate (非重要だが緊急)</h2>
+            <button class="btn-blind" title="ブラインド切り替え">🕶️</button>
+          </div>
+          <ul id="todo-list-delegate" class="todo-list quadrant-list"></ul>
+          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中</div></div>
+        </div>
+        <div class="column-resizer" data-resizer="2"></div>
+        <div class="quadrant-column" data-quadrant="memo">
+          <div class="quadrant-header-row" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="quadrant-title" style="color: #10b981; margin: 0;">Memo (非重要・非緊急)</h2>
+            <button class="btn-blind" title="ブラインド切り替え">🕶️</button>
+          </div>
+          <ul id="todo-list-memo" class="todo-list quadrant-list"></ul>
+          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中</div></div>
+        </div>
       </div>
+
+      <!-- Completed Tasks Drawer -->
+      <div id="completed-drawer" class="completed-drawer">
+        <div class="drawer-header">
+          <h2>完了済みタスク</h2>
+          <button id="btn-close-drawer" class="btn-close">&times;</button>
+        </div>
+        <ul id="list-completed" class="todo-list"></ul>
+      </div>
+
     </main>
+
+    <!-- Negative Impression Improvement Sheet Modal -->
+    <div id="modal-negative-sheet" class="modal-overlay" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <h2>ネガティブ想起改善シート</h2>
+            <p id="sheet-task-name" class="modal-subtitle">タスク: -</p>
+          </div>
+          <div class="modal-actions no-print">
+            <button id="btn-action-timer" class="btn-timer">⚡ 5秒後に行動</button>
+            <button id="btn-print-sheet" class="btn-print">🖨️ 印刷</button>
+            <button id="btn-save-sheet" class="btn-save-close">保存して閉じる</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <table class="negative-sheet-table">
+            <thead>
+              <tr>
+                <th style="width: 40px;">No.</th>
+                <th>内容の明示化</th>
+                <th style="width: 120px;">予想される困難度<br><small>(1-10)</small></th>
+                <th style="width: 120px;">予想される満足度<br><small>(1-10)</small></th>
+                <th style="width: 120px;">実際の困難度<br><small>(1-10)</small></th>
+                <th style="width: 120px;">実際の満足度<br><small>(1-10)</small></th>
+              </tr>
+            </thead>
+            <tbody id="sheet-rows-container">
+              <!-- 10 rows generated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="js/store.js"></script>

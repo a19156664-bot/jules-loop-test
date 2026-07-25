@@ -146,6 +146,51 @@ function runTests() {
   assert.strictEqual(savedFont2, 'meiryo', 'Saved font should be meiryo');
   console.log('✅ Test 11 Passed: saveFont() and getFont() return correctly updated font');
 
+  // Test 12: Eisenhower Matrix quadrant assignment and completed drawer filter
+  store.clearTodos();
+  const qTodo1 = store.addTodo('Q Task 1', 'high', null, 'schedule');
+  assert.strictEqual(qTodo1.quadrant, 'schedule', 'Quadrant should be schedule on creation');
+
+  const isQuadUpdated = store.updateQuadrant(qTodo1.id, 'delegate');
+  assert.strictEqual(isQuadUpdated, true, 'updateQuadrant should return true');
+  const updatedQTodo = store.getTodos().find(item => item.id === qTodo1.id);
+  assert.strictEqual(updatedQTodo.quadrant, 'delegate', 'Quadrant should be updated to delegate');
+  
+  // Create a completed task to test separation logic equivalent
+  const qTodoCompleted = store.addTodo('Completed Q Task', 'low', null, 'do_first');
+  store.toggleTodo(qTodoCompleted.id);
+  
+  const allTodos = store.getTodos();
+  const activeTodos = allTodos.filter(t => !t.completed);
+  const completedTodos = allTodos.filter(t => t.completed);
+
+  assert.strictEqual(activeTodos.length, 1, 'Should have 1 active task');
+  assert.strictEqual(activeTodos[0].quadrant, 'delegate', 'Active task should be in delegate quadrant');
+  assert.strictEqual(completedTodos.length, 1, 'Should have 1 completed task');
+  assert.strictEqual(completedTodos[0].id, qTodoCompleted.id, 'Completed task should match');
+  console.log('✅ Test 12 Passed: Eisenhower Matrix quadrant assignment and completed drawer filter');
+
+  // Test 13: Negative sheet data persistence
+  store.clearTodos();
+  const sheetTodo = store.addTodo('Sheet Task');
+  assert.strictEqual(Array.isArray(sheetTodo.negativeSheet), true, 'negativeSheet should be an array');
+  assert.strictEqual(sheetTodo.negativeSheet.length, 10, 'negativeSheet should have 10 rows');
+
+  const newSheetData = Array.from({ length: 10 }, (_, i) => ({
+    no: i + 1,
+    description: `Test Description ${i + 1}`,
+    expectedDifficulty: '5',
+    expectedSatisfaction: '8',
+    actualDifficulty: '3',
+    actualSatisfaction: '9'
+  }));
+  const isSheetUpdated = store.updateNegativeSheet(sheetTodo.id, newSheetData);
+  assert.strictEqual(isSheetUpdated, true, 'updateNegativeSheet should return true');
+  
+  const updatedSheetTodo = store.getTodos().find(item => item.id === sheetTodo.id);
+  assert.deepStrictEqual(updatedSheetTodo.negativeSheet, newSheetData, 'Saved negativeSheet should match new data');
+  console.log('✅ Test 13 Passed: Negative sheet data persistence');
+
   console.log('🎉 All tests passed successfully!');
 }
 

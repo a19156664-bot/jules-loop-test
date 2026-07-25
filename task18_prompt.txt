@@ -1,0 +1,21 @@
+Task 18: [NEW] Interactive Quadrant Column Resizing
+
+## Objective
+Implement mouse-drag column resizers between the 4 quadrant columns so users can interactively adjust column widths to prevent long task text from being truncated.
+
+## DoD (Definition of Done)
+1. In `index.html` and `style.css`, add column resizer elements (`.column-resizer`) between adjacent quadrant columns in the grid/flex layout, styled with a subtle grabbable border and `cursor: col-resize`.
+2. In `js/app.js`, add mouse event listeners (`mousedown`, `mousemove`, `mouseup`) to allow dragging resizers to dynamically adjust the width/flex-basis of adjacent quadrant columns.
+3. Preserve responsive behavior (e.g. stack on small screens or disable resizing below mobile breakpoints).
+4. Ensure all 13 existing unit tests in `tests/store.test.js` continue to pass cleanly (100% green).
+
+## Allowed Scope
+- index.html
+- style.css
+- js/app.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

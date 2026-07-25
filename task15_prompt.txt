@@ -1,0 +1,23 @@
+Task 15: [NEW] 4-Quadrant Eisenhower Matrix Data Model & Font Clean-up
+
+## Objective
+Refactor the Todo app layout and data structure from a single list into a 4-Quadrant Eisenhower Matrix ("Do First", "Schedule", "Delegate", "Memo / Don't Do"). Clean up the low-impact font-switching UI, and add a "Completed Tasks Drawer" to hold completed tasks outside the main 4 quadrants.
+
+## DoD (Definition of Done)
+1. In `js/store.js`, update the data model to assign each todo item a `quadrant` property (`'do_first'`, `'schedule'`, `'delegate'`, `'memo'`, default: `'do_first'`). Ensure completed tasks are excluded from quadrant lists and accessible via completed task queries.
+2. In `index.html` and `js/app.js`, remove the `#font-select` element and clean up font logic. Re-architect the main UI layout into a 4-column Eisenhower Matrix container displaying cards for each quadrant, plus a header button `#btn-completed-drawer` to toggle a modal/drawer showing completed tasks.
+3. In `style.css`, style the 4 quadrant columns ("Do First" in red/accent, "Schedule" in blue, "Delegate" in yellow, "Memo" in green/gray) matching a modern card-based matrix layout.
+4. Add unit test `Test 12: Eisenhower Matrix quadrant assignment and completed drawer filter` to `tests/store.test.js`. All 12 unit tests must pass cleanly.
+
+## Allowed Scope
+- index.html
+- style.css
+- js/store.js
+- js/app.js
+- tests/store.test.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

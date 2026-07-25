@@ -1,0 +1,24 @@
+Task 17: [NEW] Negative Impression Improvement Sheet Modal with Print & Timer
+
+## Objective
+Implement a popup modal for "Negative Impression Improvement Sheet" (ネガティブ想起改善シート) when a user clicks a task title/card. The sheet displays a structured matrix table (No 1-10, Description, Expected Difficulty 1-10, Expected Satisfaction 1-10, Actual Difficulty 1-10, Actual Satisfaction 1-10), along with a "5s Action Timer" button, a "Print" button (`window.print()`), and a "Save & Close" button.
+
+## DoD (Definition of Done)
+1. In `index.html`, add a modal template `#modal-negative-sheet` featuring a header (sheet title, task name), top action toolbar ("5s Action Timer", "Print", "Save & Close"), and a 10-row matrix table with editable input fields matching the user's design reference.
+2. In `js/store.js`, update the todo data model to store a `negativeSheet` object (array of 10 row objects) on each todo item and add `updateNegativeSheet(id, sheetData)`.
+3. In `js/app.js`, attach a click event to task titles to launch the sheet modal, pre-fill inputs with the task's saved sheet data, handle "Save & Close", "Print" (`window.print()`), and a 5-second countdown timer for "5s Action Timer".
+4. Add CSS styles in `style.css` matching the dark/light/pastel-green theme styling for the modal and printable view `@media print`.
+5. Add unit test `Test 13: Negative sheet data persistence` to `tests/store.test.js`. All 13 unit tests must pass cleanly.
+
+## Allowed Scope
+- index.html
+- style.css
+- js/store.js
+- js/app.js
+- tests/store.test.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md
