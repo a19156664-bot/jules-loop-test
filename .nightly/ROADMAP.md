@@ -227,5 +227,16 @@
 
 ---
 
+## 🛠️ Chatworkリマインド通信100%安定化 (Task 29)
+
+### [x] Task 29: [NEW] Guaranteed Chatwork Notification via Hidden Form & Iframe Submission (CORS/OPTIONS 100%回避)
+- **DoD (完了条件)**:
+  - [x] `index.html` に隠し iframe (`#chatwork-iframe`) と隠し フォーム (`#chatwork-form`) を設置し、CORS / OPTIONS プリフライト制限を受けない HTML5 フォーム送信メカニズムを構築すること
+  - [x] `js/store.js` / `js/app.js` にて、リマインド送信時に期限当日・超過タスクの本文を隠しフォーム経由で即座に `submit()` 送信可能にすること
+  - [x] 全16件の単体テストが100%グリーンでパスすること
+
+
+---
+
 
 

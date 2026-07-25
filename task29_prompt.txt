@@ -1,0 +1,23 @@
+Task 29: [NEW] Guaranteed Chatwork Notification via Hidden Form & Iframe Submission
+
+## Objective
+Implement a guaranteed Chatwork notification reminder mechanism using an HTML5 hidden `<form>` targeting a hidden `<iframe>`. This bypasses browser Same-Origin Policy (SOP), CORS preflight (OPTIONS 405/403) blocks, and proxy dependencies, ensuring 100% reliable message delivery from any local browser page.
+
+## DoD (Definition of Done)
+1. In `index.html`, add a hidden `<iframe>` (`#chatwork-iframe` with `display: none`) and a hidden `<form>` (`#chatwork-form` with `method="POST"`, `target="chatwork-iframe"`).
+2. In `js/store.js` / `js/app.js`:
+   - Enhance `sendChatworkReminder()` so that when triggering a Chatwork reminder, it updates the hidden form's `action` to `https://api.chatwork.com/v2/rooms/385392979/messages?x-chatworktoken=e8e8e25a481d270457a2fd7adb4e0af9` (or sets the message body in a `<textarea name="body">`), and invokes `form.submit()`.
+   - Maintain full fallback support for direct `fetch` if available.
+3. Ensure all 16 existing unit tests in `tests/store.test.js` continue to pass cleanly (100% green).
+
+## Allowed Scope
+- index.html
+- style.css
+- js/app.js
+- js/store.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

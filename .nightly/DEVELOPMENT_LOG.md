@@ -39,6 +39,7 @@
 | **Task 26** | Fix Negative Sheet Modal Opacity & Contrast for High Visibility | Jules | Pass (Test 1~14) | 検収完了 | 30分タイマー監視＆自動検収・Session `14646258845909991646` |
 | **Task 27** | Interactive Resizable Window for Negative Impression Sheet | Jules | Pass (Test 1~14) | 検収完了 | 30分タイマー監視＆自動検収・Session `11628908757352637871` |
 | **Task 28** | Chatwork Remind Notification Feature for Due/Overdue Tasks | Jules | Pass (Test 1~15) | 検収完了 | 30分タイマー監視＆自動検収・Session `1545387087279976427` |
+| **Task 29** | Guaranteed Chatwork Notification via Hidden Form & Iframe Submission | Jules | Pass (Test 1~16) | 検収完了 | 30分タイマー監視＆自動検収・Session `7322212612972546435` |
 
 ---
 
@@ -96,11 +97,9 @@
 
 ## 🔮 4. 今後のロードマップ & 次の展開案
 
-「パターンB（一括パイプラインモデル）」に基づき、モーダル視認性修復・リサイズ ＆ Chatwork連携タスク（Task 26 〜 Task 28）を順次発注・進行予定です。
+「パターンB（一括パイプラインモデル）」に基づき、Chatworkリマインド通信100%安定化タスク（Task 29）を発注・進行中です。
 
-* **[ ] Task 26: Fix Negative Sheet Modal Opacity & Contrast for High Visibility (背景透過除去・視認性修復 / 項目 ②)**
-* **[ ] Task 27: Interactive Resizable Window for Negative Impression Sheet (モーダルサイズ変更 / 項目 ①)**
-* **[ ] Task 28: Chatwork Remind Notification Feature for Due/Overdue Tasks (Chatworkリマインド自動/手動送信 / 項目 ③)**
+* **[ ] Task 29: Guaranteed Chatwork Notification via Hidden Form & Iframe Submission (CORS/OPTIONS 100%回避)**
 
 ---
 
