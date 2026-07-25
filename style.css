@@ -778,6 +778,15 @@ body {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
+/* Specific overrides for negative sheet to prevent transparency issues */
+#modal-negative-sheet .modal-content {
+  background: var(--bg-color);
+  opacity: 1;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  z-index: 1050;
+  position: relative;
+}
+
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -839,21 +848,22 @@ body {
 
 .negative-sheet-table th,
 .negative-sheet-table td {
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--text-muted);
   padding: 8px;
   text-align: center;
 }
 
 .negative-sheet-table th {
-  background: rgba(0, 0, 0, 0.2);
-  color: var(--text-muted);
+  background: var(--text-muted);
+  color: var(--bg-color);
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 [data-theme="light"] .negative-sheet-table th,
 [data-theme="pastel-green"] .negative-sheet-table th {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--text-muted);
+  color: var(--bg-color);
 }
 
 .negative-sheet-table td input[type="text"],
@@ -864,7 +874,8 @@ body {
   color: var(--text-main);
   outline: none;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .negative-sheet-table td input[type="text"] {
@@ -920,4 +931,18 @@ body {
   .negative-sheet-table th {
     background: #eee !important;
   }
+}
+
+#modal-negative-sheet .modal-content {
+  resize: both;
+  overflow: auto;
+  min-width: 550px;
+  min-height: 420px;
+  max-width: 95vw;
+}
+
+#modal-negative-sheet .modal-content::-webkit-resizer {
+  background-color: transparent;
+  background-image: linear-gradient(135deg, transparent 40%, var(--text-muted) 40%, var(--text-muted) 50%, transparent 50%, transparent 70%, var(--text-muted) 70%, var(--text-muted) 80%, transparent 80%);
+  border-bottom-right-radius: var(--radius-lg);
 }

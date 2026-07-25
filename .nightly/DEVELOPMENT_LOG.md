@@ -27,15 +27,18 @@
 | **Task 14** | フォント切替機能（メイリオ / Noto Sans JP / 源ノ角ゴシック） | Jules | Pass (Test 1~11) | `main` 統合 | 30分タイマー監視＆自動検収・Session `10796955855255052128` |
 | **Task 15** | 4-Quadrant Eisenhower Matrix Data Model & Font Clean-up | Jules | Pass (Test 1~12) | 検収完了 | 30分タイマー監視＆自動検収・Session `9795886713874596832` |
 | **Task 16** | HTML5 Drag & Drop Implementation for Quadrants | Jules | Pass (Test 1~12) | 検収完了 | 30分タイマー監視＆自動検収・Session `14884084053353404076` |
-| **Task 17** | Negative Impression Improvement Sheet Modal with Print & Timer | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `15120677455947216698` |
+| **Task 17** | Negative Impression Improvement Sheet Modal with Print & Timer | Jules | Pass (Test 1~13) | `main` 統合 | 30分タイマー監視＆自動検収・Session `15120677455947216698` |
 | **Task 18** | Interactive Quadrant Column Resizing | Jules | Pass (Test 1~13) | `main` 統合 | 30分タイマー監視＆自動検収・Session `10091134432717859996` |
 | **Task 19** | Top-to-Bottom Window Blind Shutter Effect for Privacy | Jules | Pass (Test 1~13) | `main` 統合 | 30分タイマー監視＆自動検収・Session `11317541287075953486` |
 | **Task 20** | Fix Task Addition Logic and Quadrant Rendering Bug | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `16905223753505901282` |
 | **Task 21** | Full-Screen Eisenhower Matrix Desktop UI Redesign | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `18225416251161611955` |
 | **Task 22** | Task Name Editing via F2 Shortcut Key | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `10927216617921882997` |
 | **Task 23** | Intra-Quadrant Task Drag & Drop Reordering | Jules | Pass (Test 1~14) | 検収完了 | 30分タイマー監視＆自動検収・Session `1220459167706984526` |
-| **Task 24** | Settings Modal (Gear Icon ⚙️) with Custom Font Selection | Jules | Pass (Test 1~14) | 検収完了 | 30分タイマー監視＆自動検収・Session `15484346675324629613` |
-| **Task 25** | Enhanced Blind Feature with Scroll-Wheel Opacity & Rich Shutter Animation | Jules | Pass (Test 1~14) | 検収完了 | 30分タイマー監視＆自動検収・Session `14464096702725441439` |
+| **Task 24** | Settings Modal (Gear Icon ⚙️) with Custom Font Selection | Jules | Pass (Test 1~14) | `main` 統合 | 30分タイマー監視＆自動検収・Session `15484346675324629613` |
+| **Task 25** | Enhanced Blind Feature with Scroll-Wheel Opacity & Rich Shutter Animation | Jules | Pass (Test 1~14) | `main` 統合 | 30分タイマー監視＆自動検収・Session `14464096702725441439` |
+| **Task 26** | Fix Negative Sheet Modal Opacity & Contrast for High Visibility | Jules | Pass (Test 1~14) | 検収完了 | 30分タイマー監視＆自動検収・Session `14646258845909991646` |
+| **Task 27** | Interactive Resizable Window for Negative Impression Sheet | Jules | Pass (Test 1~14) | 検収完了 | 30分タイマー監視＆自動検収・Session `11628908757352637871` |
+| **Task 28** | Chatwork Remind Notification Feature for Due/Overdue Tasks | Jules | Pass (Test 1~15) | 検収完了 | 30分タイマー監視＆自動検収・Session `1545387087279976427` |
 
 ---
 
@@ -93,12 +96,11 @@
 
 ## 🔮 4. 今後のロードマップ & 次の展開案
 
-「パターンB（一括パイプラインモデル）」に基づき、UX強化および高度カスタマイズ機能（Task 22 〜 Task 25）を順次発注・進行予定です。
+「パターンB（一括パイプラインモデル）」に基づき、モーダル視認性修復・リサイズ ＆ Chatwork連携タスク（Task 26 〜 Task 28）を順次発注・進行予定です。
 
-* **[ ] Task 22: Task Name Editing via F2 Shortcut Key (F2キー編集機能 / 項目 ①)**
-* **[ ] Task 23: Intra-Quadrant Task Drag & Drop Reordering (同一枠内上下並び替え / 項目 ②)**
-* **[ ] Task 24: Settings Modal (Gear Icon ⚙️) with Custom Font Selection (設定モーダル＆フォント選択 / 項目 ③)**
-* **[ ] Task 25: Enhanced Blind Feature with Scroll-Wheel Opacity & Rich Shutter Animation (ブラインド濃さ調整＆リッチ化 / 項目 ④)**
+* **[ ] Task 26: Fix Negative Sheet Modal Opacity & Contrast for High Visibility (背景透過除去・視認性修復 / 項目 ②)**
+* **[ ] Task 27: Interactive Resizable Window for Negative Impression Sheet (モーダルサイズ変更 / 項目 ①)**
+* **[ ] Task 28: Chatwork Remind Notification Feature for Due/Overdue Tasks (Chatworkリマインド自動/手動送信 / 項目 ③)**
 
 ---
 

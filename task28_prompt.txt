@@ -1,0 +1,29 @@
+Task 28: [NEW] Chatwork Remind Notification Feature for Due/Overdue Tasks
+
+## Objective
+Implement automatic and manual Chatwork notification reminders for tasks that have a due date set to today or are overdue.
+
+## DoD (Definition of Done)
+1. In `js/store.js`:
+   - Implement `getDueOrOverdueTodos()` method that filters active (uncompleted) tasks whose `dueDate` is today or past today.
+   - Implement `sendChatworkReminder()` async method sending HTTP POST requests to `https://api.chatwork.com/v2/rooms/385392979/messages` with header `X-ChatWorkToken: e8e8e25a481d270457a2fd7adb4e0af9`.
+   - IMPORTANT SAFETY CLAUSE: Wrap network requests in `try / catch` with safe fallback handling so that network isolation during automated testing does NOT break function execution or cause errors.
+2. In `index.html` and `js/app.js`:
+   - Add a "🔔 Chatworkリマインド送信" button (`#btn-send-reminder`) in the header actions.
+   - Attach click listener to trigger `sendChatworkReminder()` and present a clean status toast.
+   - Implement an automated AM 6:00 check (store last sent date in `localStorage` and trigger auto-check after 6:00 AM on first daily load).
+3. In `tests/store.test.js`:
+   - Add `Test 15: getDueOrOverdueTodos()` to verify filtering logic without making live network calls. Ensure all 15 tests pass 100% green.
+
+## Allowed Scope
+- index.html
+- style.css
+- js/app.js
+- js/store.js
+- tests/store.test.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

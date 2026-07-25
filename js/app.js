@@ -39,8 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCloseDrawer = document.getElementById('btn-close-drawer');
 
   // Settings Modal
+
   const btnSettings = document.getElementById('btn-settings');
+  const btnSendReminder = document.getElementById('btn-send-reminder');
   const modalSettings = document.getElementById('modal-settings');
+
   const btnCloseSettings = document.getElementById('btn-close-settings');
   const fontSelect = document.getElementById('font-select');
 
@@ -650,6 +653,51 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, 1000);
   });
+
+
+  // Automated AM 6:00 check for Chatwork reminder
+  function checkAndSendAutoReminder() {
+    const now = new Date();
+    const lastSentDateStr = localStorage.getItem('chatwork_last_sent_date');
+    const todayStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
+
+    // Check if it's after 6:00 AM today and we haven't sent it yet today
+    if (now.getHours() >= 6 && lastSentDateStr !== todayStr) {
+      store.sendChatworkReminder().then(success => {
+        if (success) {
+          localStorage.setItem('chatwork_last_sent_date', todayStr);
+          console.log('Automated Chatwork reminder sent successfully.');
+        }
+      });
+    }
+  }
+
+  // Handle manual Chatwork reminder button
+  if (btnSendReminder) {
+    btnSendReminder.addEventListener('click', async () => {
+      btnSendReminder.disabled = true;
+      const originalText = btnSendReminder.textContent;
+      btnSendReminder.textContent = '⏳ 送信中...';
+      
+      const success = await store.sendChatworkReminder();
+      
+      if (success) {
+        btnSendReminder.textContent = '✅ 送信完了';
+        // Optional: show a clean toast
+        // alert('Chatworkにリマインドを送信しました。');
+      } else {
+        btnSendReminder.textContent = '❌ 送信失敗';
+      }
+      
+      setTimeout(() => {
+        btnSendReminder.disabled = false;
+        btnSendReminder.textContent = originalText;
+      }, 3000);
+    });
+  }
+
+  // Initial check for auto reminder
+  checkAndSendAutoReminder();
 
   // Initial Render
   render();

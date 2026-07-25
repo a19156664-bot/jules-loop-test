@@ -1,0 +1,20 @@
+Task 27: [NEW] Interactive Resizable Window for Negative Impression Sheet
+
+## Objective
+Make the Negative Impression Sheet modal window (`#modal-negative-sheet .modal-content`) dynamically resizable using mouse dragging on its edges/corner.
+
+## DoD (Definition of Done)
+1. In `style.css`, add `resize: both; overflow: auto; min-width: 550px; min-height: 420px;` to `#modal-negative-sheet .modal-content`. Add a visible grab resizer indicator in the bottom-right corner.
+2. Ensure the inner table (`.negative-sheet-table`) and header responsive layout expand fluidly when the modal window is resized by the user.
+3. Ensure all 14 existing unit tests in `tests/store.test.js` continue to pass cleanly (100% green).
+
+## Allowed Scope
+- index.html
+- style.css
+- js/app.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

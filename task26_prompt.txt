@@ -1,0 +1,22 @@
+Task 26: [NEW] Fix Negative Sheet Modal Opacity & Contrast for High Visibility
+
+## Objective
+Fix the background opacity and visual contrast for `#modal-negative-sheet .modal-content` so that background elements, quadrant titles, and icons never show through or overlap with the modal text.
+
+## DoD (Definition of Done)
+1. In `style.css`, update `#modal-negative-sheet .modal-content` styling:
+   - Ensure a completely solid background (`background: var(--card-bg)`, `opacity: 1`) with a strong backdrop shadow and `z-index` so background elements do not shine through.
+   - Improve contrast for table borders, header backgrounds, and input text across Dark, Light, and Pastel-Green themes.
+2. In `index.html`, ensure the modal markup is clean and positioned properly.
+3. Ensure all 14 existing unit tests in `tests/store.test.js` continue to pass cleanly (100% green).
+
+## Allowed Scope
+- index.html
+- style.css
+- js/app.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md
