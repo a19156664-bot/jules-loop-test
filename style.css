@@ -19,6 +19,18 @@
   --input-bg: #0f172a;
 }
 
+:root[data-font="meiryo"] {
+  --app-font: "Meiryo", "メイリオ", sans-serif;
+}
+
+:root[data-font="yu-gothic"] {
+  --app-font: "Yu Gothic", "YuGothic", "游ゴシック Medium", sans-serif;
+}
+
+:root[data-font="biz-ud-gothic"] {
+  --app-font: "BIZ UDPGothic", "BIZ UDGothic", sans-serif;
+}
+
 [data-theme="light"] {
   color-scheme: light;
   --bg-color: #e2e8f0;
@@ -457,18 +469,20 @@ body {
   height: calc(100% - 40px);
   background: repeating-linear-gradient(
     0deg,
-    var(--card-bg),
-    var(--card-bg) 14px,
-    var(--card-border) 14px,
-    var(--card-border) 16px
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.05) 14px,
+    rgba(0, 0, 0, 0.2) 14px,
+    rgba(0, 0, 0, 0.4) 16px
   );
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 10px 15px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   transform: translateY(-100%);
   opacity: 0;
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
   z-index: 10;
   pointer-events: none;
 }
@@ -481,6 +495,8 @@ body {
 
 .blind-content {
   background: var(--card-bg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border: 1px solid var(--card-border);
   padding: 8px 16px;
   border-radius: var(--radius-md);
@@ -488,6 +504,16 @@ body {
   font-size: 0.85rem;
   font-weight: 500;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+}
+
+.shutter-badge {
+  transition: opacity 0.2s ease;
+}
+
+.shutter-badge.scrolling {
+  opacity: 1 !important;
 }
 
 .column-resizer {

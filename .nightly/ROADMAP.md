@@ -175,6 +175,34 @@
   - [x] 上部入力ヘッダーをスッキリ配置し、画面主要領域に4つの象限（Do First, Schedule, Delegate, Memo）が堂々と大画面で広がるプロ仕様のデザインにすること
   - [x] 全テーマ (Dark, Light, Pastel Green) で大画面レスポンシブ配置を美しく維持すること
 
+---
+
+## ⚙️ UX強化 ＆ 高度カスタマイズ・機能拡張 (Task 22 〜 Task 25)
+
+### [x] Task 22: [NEW] Task Name Editing via F2 Shortcut Key (F2キー編集機能) (項目 ①)
+- **DoD (完了条件)**:
+  - [x] タスクカードフォーカス・選択時に `F2` キー押下でタスク名をインライン編集モードへ切り替え、Enterキーまたはフォーカスアウトで即座に保存・更新可能にすること
+
+---
+
+### [x] Task 23: [NEW] Intra-Quadrant Task Drag & Drop Reordering (同一枠内上下並び替え) (項目 ②)
+- **DoD (完了条件)**:
+  - [x] 同じ象限枠内でのタスクカードの上下ドラッグ＆ドロップ移動・順序並び替えに対応し、並び順を `LocalStorage` に永続保存すること
+
+---
+
+### [x] Task 24: [NEW] Settings Modal (Gear Icon ⚙️) with Custom Font Selection (設定モーダル＆フォント選択) (項目 ③)
+- **DoD (完了条件)**:
+  - [x] ヘッダーに歯車 ⚙️ アイコンの設定ボタンおよび設定モーダルを追加し、フォント選択（メイリオ、游ゴシック、BIZ UDゴシック）でアプリ全体のUIフォントを即座に変更・永続化すること
+
+---
+
+### [x] Task 25: [NEW] Enhanced Blind Feature with Scroll-Wheel Opacity & Rich Shutter Animation (ブラインド濃さ調整＆超リッチ化) (項目 ④)
+- **DoD (完了条件)**:
+  - [x] ブラインドカバー上でマウスホイールを回転させることで濃さ（不透明度 30%〜100%）を無段階調整可能にすること
+  - [x] ブラインドシャッターのアニメーションおよびテクスチャを重厚感ある最高品質の質感へリッチ化すること
+
+
 
 
 

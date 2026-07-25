@@ -1,0 +1,23 @@
+Task 23: [NEW] Intra-Quadrant Task Drag & Drop Reordering
+
+## Objective
+Enable users to reorder todo task items vertically within the same quadrant column using HTML5 Drag & Drop, and persist the new order to `LocalStorage`.
+
+## DoD (Definition of Done)
+1. In `js/store.js`, implement a `reorderTodos(quadrant, orderedIds)` method that updates the array order of todos within the specified quadrant based on the provided list of IDs, saving to `LocalStorage`.
+2. In `js/app.js`, extend the drag and drop event listeners (`dragover`, `drop`) on `.todo-item` elements so dragging a task over another task in the same column provides visual insertion feedback and drops it before or after the targeted item.
+3. Ensure that after dropping, `store.reorderTodos()` is invoked and the list stays in the exact user-defined vertical order.
+4. Add unit test `Test 14: reorderTodos()` in `tests/store.test.js` and ensure all 14 tests pass cleanly (100% green).
+
+## Allowed Scope
+- index.html
+- style.css
+- js/app.js
+- js/store.js
+- tests/store.test.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

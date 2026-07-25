@@ -38,6 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const completedDrawer = document.getElementById('completed-drawer');
   const btnCloseDrawer = document.getElementById('btn-close-drawer');
 
+  // Settings Modal
+  const btnSettings = document.getElementById('btn-settings');
+  const modalSettings = document.getElementById('modal-settings');
+  const btnCloseSettings = document.getElementById('btn-close-settings');
+  const fontSelect = document.getElementById('font-select');
+
   let currentFilter = 'all';
   let currentPriorityFilter = 'all';
 
@@ -80,6 +86,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Load and apply Font
+  function applyFont(font) {
+    document.documentElement.setAttribute('data-font', font);
+    if (fontSelect) {
+      fontSelect.value = font;
+    }
+  }
+
+  const savedFont = store.getFont();
+  applyFont(savedFont);
+
+  if (fontSelect) {
+    fontSelect.addEventListener('change', (e) => {
+      const selectedFont = e.target.value;
+      store.saveFont(selectedFont);
+      applyFont(selectedFont);
+    });
+  }
+
+  // Settings Modal Event Listeners
+  if (btnSettings && modalSettings && btnCloseSettings) {
+    btnSettings.addEventListener('click', () => {
+      modalSettings.style.display = 'flex';
+    });
+
+    btnCloseSettings.addEventListener('click', () => {
+      modalSettings.style.display = 'none';
+    });
+    
+    // Close modal when clicking outside
+    modalSettings.addEventListener('click', (e) => {
+      if (e.target === modalSettings) {
+        modalSettings.style.display = 'none';
+      }
+    });
+  }
+
   /**
    * Render TODO items based on current filter
    */
@@ -116,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
       li.className = `todo-item ${todo.completed ? 'completed' : ''} ${isOverdue ? 'overdue' : ''}`.trim();
       li.dataset.id = todo.id;
       li.draggable = true;
+      li.tabIndex = 0; // Make the task item focusable
 
       // Drag and Drop event listeners for task item
       li.addEventListener('dragstart', (e) => {
@@ -126,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       li.addEventListener('dragend', () => {
         li.classList.remove('dragging');
+        render(); // re-render to ensure DOM reflects exact store state if drag cancelled
       });
 
       const priorityLabel = todo.priority || 'medium';
@@ -181,7 +226,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       
       let isEditing = false;
-      todoText.addEventListener('dblclick', () => {
+
+      const startEditing = () => {
         if (todo.completed || isEditing) return; // Don't edit if completed
         isEditing = true;
         
@@ -220,6 +266,15 @@ document.addEventListener('DOMContentLoaded', () => {
             cancelEdit();
           }
         });
+      };
+
+      todoText.addEventListener('dblclick', startEditing);
+
+      li.addEventListener('keydown', (e) => {
+        if (e.key === 'F2') {
+          e.preventDefault();
+          startEditing();
+        }
       });
 
       // Regular click toggles it if not editing, BUT we need a small delay 
@@ -288,13 +343,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Helper to determine the drop position within a column
+  function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.todo-item:not(.dragging)')];
+
+    return draggableElements.reduce((closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+        return { offset: offset, element: child };
+      } else {
+        return closest;
+      }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+  }
+
   // Setup Drag and Drop for Quadrant Columns
   const quadrantColumns = document.querySelectorAll('.quadrant-column');
   quadrantColumns.forEach(column => {
+    const ul = column.querySelector('.todo-list');
+
     column.addEventListener('dragover', (e) => {
       e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
       column.classList.add('drag-over');
+
+      const afterElement = getDragAfterElement(ul, e.clientY);
+      const draggable = document.querySelector('.dragging');
+      if (draggable) {
+        if (afterElement == null) {
+          ul.appendChild(draggable);
+        } else {
+          ul.insertBefore(draggable, afterElement);
+        }
+      }
     });
 
     column.addEventListener('dragleave', () => {
@@ -304,12 +386,61 @@ document.addEventListener('DOMContentLoaded', () => {
     column.addEventListener('drop', (e) => {
       e.preventDefault();
       column.classList.remove('drag-over');
-      const todoId = e.dataTransfer.getData('text/plain');
+      
       const newQuadrant = column.dataset.quadrant;
-
-      if (todoId && newQuadrant) {
-        store.updateQuadrant(todoId, newQuadrant);
+      
+      if (newQuadrant) {
+        // Collect the ordered IDs from the DOM after insertion
+        const orderedIds = [...ul.querySelectorAll('.todo-item')].map(li => li.dataset.id);
+        if (orderedIds.length > 0) {
+          store.reorderTodos(newQuadrant, orderedIds);
+        }
+        
+        // Also ensure we handle cases where dropping across columns updates quadrant
+        // for an item that we just moved, `reorderTodos` takes care of both quadrant update 
+        // and ordering.
         render();
+      }
+    });
+  });
+
+  // Setup Scroll-Wheel Opacity Adjustment for Blinds
+  const shutters = document.querySelectorAll('.blind-shutter');
+  shutters.forEach(shutter => {
+    let opacity = 1.0;
+    let scrollTimeout;
+    const badge = shutter.querySelector('.shutter-badge');
+    
+    if (badge) {
+      badge.style.opacity = '0'; // default hidden
+    }
+
+    shutter.addEventListener('wheel', (e) => {
+      // Only adjust if the column has blind-active
+      const col = shutter.closest('.quadrant-column');
+      if (!col || !col.classList.contains('blind-active')) return;
+      
+      e.preventDefault(); // Prevent default scroll
+      
+      if (e.deltaY < 0) {
+        // Scroll up - increase opacity
+        opacity = Math.min(1.0, opacity + 0.05);
+      } else {
+        // Scroll down - decrease opacity
+        opacity = Math.max(0.3, opacity - 0.05);
+      }
+      
+      shutter.style.opacity = opacity.toFixed(2);
+      
+      if (badge) {
+        badge.textContent = Math.round(opacity * 100) + '%';
+        badge.classList.add('scrolling');
+        
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          badge.classList.remove('scrolling');
+          badge.style.opacity = '0'; // ensure it fades out if class is removed
+        }, 1000); // fade out after 1 second of no scrolling
       }
     });
   });

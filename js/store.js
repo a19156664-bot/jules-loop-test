@@ -24,7 +24,7 @@ class TodoStore {
 
   /**
    * Save font to LocalStorage
-   * @param {string} font ('meiryo', 'noto-sans-jp', 'source-han-sans')
+   * @param {string} font ('meiryo', 'yu-gothic', 'biz-ud-gothic')
    */
   saveFont(font) {
     try {
@@ -227,6 +227,42 @@ class TodoStore {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Reorder todos within a specific quadrant
+   * @param {string} quadrant - Quadrant of the tasks
+   * @param {Array<string>} orderedIds - Array of todo IDs in the new order
+   */
+  reorderTodos(quadrant, orderedIds) {
+    const todos = this.getTodos();
+    const indices = [];
+    const orderedItems = [];
+
+    // Collect the current indices of the items that are being reordered
+    todos.forEach((t, index) => {
+      if (orderedIds.includes(t.id)) {
+        indices.push(index);
+      }
+    });
+
+    // Map orderedIds to actual todo objects in the new order
+    orderedIds.forEach(id => {
+      const todo = todos.find(t => t.id === id);
+      if (todo) {
+        todo.quadrant = quadrant; // Ensure quadrant is updated
+        orderedItems.push(todo);
+      }
+    });
+
+    // Place them back in the collected indices
+    orderedItems.forEach((item, i) => {
+      if (indices[i] !== undefined) {
+        todos[indices[i]] = item;
+      }
+    });
+
+    this.saveTodos(todos);
   }
 
   /**

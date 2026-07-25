@@ -191,6 +191,32 @@ function runTests() {
   assert.deepStrictEqual(updatedSheetTodo.negativeSheet, newSheetData, 'Saved negativeSheet should match new data');
   console.log('✅ Test 13 Passed: Negative sheet data persistence');
 
+  // Test 14: reorderTodos()
+  store.clearTodos();
+  const t1 = store.addTodo('Task 1', 'medium', null, 'schedule');
+  const t2 = store.addTodo('Task 2', 'medium', null, 'schedule');
+  const t3 = store.addTodo('Task 3', 'medium', null, 'schedule');
+  
+  // Also add a task in a different quadrant to ensure it is not affected
+  const t4 = store.addTodo('Task 4', 'medium', null, 'do_first');
+  
+  // Reorder t1, t2, t3 -> t3, t1, t2
+  store.reorderTodos('schedule', [t3.id, t1.id, t2.id]);
+  
+  const reorderedTodos = store.getTodos();
+  
+  // t4 should be first since it wasn't reordered and is untouched
+  // the rest should be t3, t1, t2 as they were collected and put back in the same indices
+  // Original array: [t1, t2, t3, t4]
+  // Indices to reorder: 0, 1, 2
+  // New order at those indices: [t3, t1, t2] -> final array: [t3, t1, t2, t4]
+  
+  assert.strictEqual(reorderedTodos[0].id, t3.id);
+  assert.strictEqual(reorderedTodos[1].id, t1.id);
+  assert.strictEqual(reorderedTodos[2].id, t2.id);
+  assert.strictEqual(reorderedTodos[3].id, t4.id);
+  console.log('✅ Test 14 Passed: reorderTodos() correctly reorders items within quadrant');
+
   console.log('🎉 All tests passed successfully!');
 }
 

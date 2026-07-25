@@ -1,0 +1,25 @@
+Task 24: [NEW] Settings Modal (Gear Icon ⚙️) with Custom Font Selection
+
+## Objective
+Add a Gear Settings button (⚙️) to the app header, opening a Settings Modal (`#modal-settings`) that allows selecting from three distinct fonts: Meiryo (メイリオ), Yu Gothic (游ゴシック), and BIZ UD Gothic (BIZ UDゴシック), dynamically updating the UI font and saving to LocalStorage.
+
+## DoD (Definition of Done)
+1. In `index.html`, add a settings button (`#btn-settings`) with a gear icon (`⚙️`) in the header right actions section. Add a `#modal-settings` overlay with a font selection dropdown (`#font-select`) offering:
+   - `'meiryo'`: メイリオ (`"Meiryo", "メイリオ", sans-serif`)
+   - `'yu-gothic'`: 游ゴシック (`"Yu Gothic", "YuGothic", "游ゴシック Medium", sans-serif`)
+   - `'biz-ud-gothic'`: BIZ UDゴシック (`"BIZ UDPGothic", "BIZ UDGothic", sans-serif`)
+2. In `style.css`, define font-family rules matching the selected `data-font` attribute on `<body>` or `:root`, or updating `--font-family` variable. Style the settings modal cleanly.
+3. In `js/app.js` and `js/store.js`, handle settings modal open/close events, load saved font on launch, update font on selection change, and call `store.saveFont(font)`.
+4. Ensure all 14 existing unit tests in `tests/store.test.js` continue to pass cleanly (100% green).
+
+## Allowed Scope
+- index.html
+- style.css
+- js/app.js
+- js/store.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

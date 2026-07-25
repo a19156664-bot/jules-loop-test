@@ -24,6 +24,7 @@
       </div>
       <div class="theme-selector" style="display: flex; gap: 10px; align-items: center;">
         <button id="btn-completed-drawer" class="btn-timer" title="タスク完了箱を開く">📦 タスク完了箱</button>
+        <button id="btn-settings" class="btn-timer" title="設定">⚙️</button>
         <select id="theme-select" class="priority-select" title="テーマ選択">
           <option value="dark">ダークモード</option>
           <option value="light">ホワイトモード</option>
@@ -90,7 +91,7 @@
             <button class="btn-blind" title="ブラインド切り替え">🕶️</button>
           </div>
           <ul id="todo-list-do_first" class="todo-list quadrant-list"></ul>
-          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中</div></div>
+          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中 <span class="shutter-badge" style="margin-left: 8px; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">100%</span></div></div>
         </div>
         <div class="column-resizer" data-resizer="0"></div>
         <div class="quadrant-column" data-quadrant="schedule">
@@ -99,7 +100,7 @@
             <button class="btn-blind" title="ブラインド切り替え">🕶️</button>
           </div>
           <ul id="todo-list-schedule" class="todo-list quadrant-list"></ul>
-          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中</div></div>
+          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中 <span class="shutter-badge" style="margin-left: 8px; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">100%</span></div></div>
         </div>
         <div class="column-resizer" data-resizer="1"></div>
         <div class="quadrant-column" data-quadrant="delegate">
@@ -108,7 +109,7 @@
             <button class="btn-blind" title="ブラインド切り替え">🕶️</button>
           </div>
           <ul id="todo-list-delegate" class="todo-list quadrant-list"></ul>
-          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中</div></div>
+          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中 <span class="shutter-badge" style="margin-left: 8px; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">100%</span></div></div>
         </div>
         <div class="column-resizer" data-resizer="2"></div>
         <div class="quadrant-column" data-quadrant="memo">
@@ -117,7 +118,7 @@
             <button class="btn-blind" title="ブラインド切り替え">🕶️</button>
           </div>
           <ul id="todo-list-memo" class="todo-list quadrant-list"></ul>
-          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中</div></div>
+          <div class="blind-shutter"><div class="blind-content">🕶️ ブラインド非表示中 <span class="shutter-badge" style="margin-left: 8px; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">100%</span></div></div>
         </div>
       </div>
 
@@ -162,6 +163,32 @@
               <!-- 10 rows generated dynamically via JS -->
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="modal-settings" class="modal-overlay" style="display: none;">
+      <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <h2>設定</h2>
+          </div>
+        </div>
+        <div class="modal-body" style="padding: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <label for="font-select" style="font-weight: 500;">フォント設定</label>
+            <select id="font-select" class="priority-select" style="width: 100%; padding: 10px;">
+              <option value="meiryo">メイリオ (Meiryo)</option>
+              <option value="yu-gothic">游ゴシック (Yu Gothic)</option>
+              <option value="biz-ud-gothic">BIZ UDゴシック</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-header" style="justify-content: flex-end; border-top: 1px solid var(--card-border); border-bottom: none; margin-top: 10px;">
+          <div class="modal-actions no-print">
+            <button id="btn-close-settings" class="btn-save-close">閉じる</button>
+          </div>
         </div>
       </div>
     </div>

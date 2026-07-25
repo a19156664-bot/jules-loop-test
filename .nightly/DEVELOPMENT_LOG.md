@@ -32,6 +32,10 @@
 | **Task 19** | Top-to-Bottom Window Blind Shutter Effect for Privacy | Jules | Pass (Test 1~13) | `main` 統合 | 30分タイマー監視＆自動検収・Session `11317541287075953486` |
 | **Task 20** | Fix Task Addition Logic and Quadrant Rendering Bug | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `16905223753505901282` |
 | **Task 21** | Full-Screen Eisenhower Matrix Desktop UI Redesign | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `18225416251161611955` |
+| **Task 22** | Task Name Editing via F2 Shortcut Key | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `10927216617921882997` |
+| **Task 23** | Intra-Quadrant Task Drag & Drop Reordering | Jules | Pass (Test 1~14) | 検収完了 | 30分タイマー監視＆自動検収・Session `1220459167706984526` |
+| **Task 24** | Settings Modal (Gear Icon ⚙️) with Custom Font Selection | Jules | Pass (Test 1~14) | 検収完了 | 30分タイマー監視＆自動検収・Session `15484346675324629613` |
+| **Task 25** | Enhanced Blind Feature with Scroll-Wheel Opacity & Rich Shutter Animation | Jules | Pass (Test 1~14) | 検収完了 | 30分タイマー監視＆自動検収・Session `14464096702725441439` |
 
 ---
 
@@ -89,10 +93,12 @@
 
 ## 🔮 4. 今後のロードマップ & 次の展開案
 
-「パターンB（一括パイプラインモデル）」に基づき、追加機能不具合修正および大画面UI刷新タスク（Task 20, 21）を発注・進行中です。
+「パターンB（一括パイプラインモデル）」に基づき、UX強化および高度カスタマイズ機能（Task 22 〜 Task 25）を順次発注・進行予定です。
 
-* **[ ] Task 20: Fix Task Addition Logic and Quadrant Rendering Bug (バグ修復)**
-* **[ ] Task 21: Full-Screen Eisenhower Matrix Desktop UI Redesign (大画面UI刷新)**
+* **[ ] Task 22: Task Name Editing via F2 Shortcut Key (F2キー編集機能 / 項目 ①)**
+* **[ ] Task 23: Intra-Quadrant Task Drag & Drop Reordering (同一枠内上下並び替え / 項目 ②)**
+* **[ ] Task 24: Settings Modal (Gear Icon ⚙️) with Custom Font Selection (設定モーダル＆フォント選択 / 項目 ③)**
+* **[ ] Task 25: Enhanced Blind Feature with Scroll-Wheel Opacity & Rich Shutter Animation (ブラインド濃さ調整＆リッチ化 / 項目 ④)**
 
 ---
 

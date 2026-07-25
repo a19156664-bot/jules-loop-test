@@ -1,0 +1,21 @@
+Task 22: [NEW] Task Name Editing via F2 Shortcut Key
+
+## Objective
+Implement inline todo task text editing triggered by pressing the `F2` keyboard shortcut on a focused or active task card element.
+
+## DoD (Definition of Done)
+1. In `js/app.js`, add a keyboard event listener for `F2` key presses. When a task item is focused or clicked/active and `F2` is pressed, replace the task label with an editable `<input type="text">` populated with the current text.
+2. Pressing `Enter` or blurring the input saves the updated task name using `store.updateTodo(id, newText)` and re-renders the list. Pressing `Escape` cancels editing.
+3. Ensure all 13 existing unit tests in `tests/store.test.js` continue to pass cleanly (100% green).
+
+## Allowed Scope
+- index.html
+- style.css
+- js/app.js
+- js/store.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md
