@@ -327,7 +327,7 @@ class TodoStore {
   /**
    * Send a Chatwork reminder for due or overdue tasks
    * @param {Date|string} currentDate
-   * @returns {Promise<Object>} Status object { success: boolean, count: number, reason?: string }
+   * @returns {Promise<Object>} Status object { success: boolean, count: number, reason?: string, details?: string }
    */
   async sendChatworkReminder(currentDate = new Date()) {
     try {
@@ -339,43 +339,76 @@ class TodoStore {
       const taskList = dueTodos.map(t => `・${t.text} (期限: ${t.dueDate})`).join('\n');
       const message = `[info][title]⏰ Focus TODO リマインダー[/title]以下のタスクが期限当日または超過しています:\n${taskList}[/info]`;
 
-      const targetUrl = 'https://api.chatwork.com/v2/rooms/385392979/messages';
-      const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
-      const params = new URLSearchParams({ body: message });
+      const token = 'e8e8e25a481d270457a2fd7adb4e0af9';
+      const roomId = '385392979';
+      const targetUrl = `https://api.chatwork.com/v2/rooms/${roomId}/messages`;
+      const bodyParams = new URLSearchParams({ body: message });
 
-      let response;
+      // Check if user has configured a custom webhook / proxy endpoint in localStorage
+      const customEndpoint = localStorage.getItem('chatwork_custom_endpoint');
+      if (customEndpoint) {
+        try {
+          const res = await fetch(customEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: bodyParams
+          });
+          if (res.ok) return { success: true, count: dueTodos.length };
+        } catch (err) {
+          console.warn('Custom endpoint failed:', err);
+        }
+      }
+
+      // Try multiple CORS proxy services sequentially
+      const proxyList = [
+        `https://thingproxy.freeboard.io/fetch/${targetUrl}`,
+        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
+      ];
+
+      for (const proxy of proxyList) {
+        try {
+          const response = await fetch(proxy, {
+            method: 'POST',
+            headers: {
+              'X-ChatWorkToken': token,
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: bodyParams
+          });
+          if (response.ok) {
+            return { success: true, count: dueTodos.length };
+          }
+        } catch (pErr) {
+          console.warn('Proxy attempt failed:', pErr);
+        }
+      }
+
+      // Fallback: direct fetch attempt
       try {
-        // Try via CORS proxy first to bypass browser CORS restriction
-        response = await fetch(proxyUrl, {
+        const directRes = await fetch(targetUrl, {
           method: 'POST',
           headers: {
-            'X-ChatWorkToken': 'e8e8e25a481d270457a2fd7adb4e0af9',
+            'X-ChatWorkToken': token,
             'Content-Type': 'application/x-www-form-urlencoded'
           },
-          body: params
+          body: bodyParams
         });
-      } catch (proxyError) {
-        console.warn('CORS Proxy failed, falling back to direct fetch:', proxyError);
-        // Fallback to direct fetch
-        response = await fetch(targetUrl, {
-          method: 'POST',
-          headers: {
-            'X-ChatWorkToken': 'e8e8e25a481d270457a2fd7adb4e0af9',
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: params
-        });
+        if (directRes.ok) {
+          return { success: true, count: dueTodos.length };
+        }
+      } catch (directErr) {
+        console.warn('Direct fetch failed due to browser CORS restriction:', directErr);
       }
 
-      if (response && response.ok) {
-        return { success: true, count: dueTodos.length };
-      } else {
-        console.warn('Chatwork API response not ok:', response ? response.status : 'No response');
-        return { success: false, count: dueTodos.length, reason: 'api_error' };
-      }
+      return {
+        success: false,
+        count: dueTodos.length,
+        reason: 'cors_blocked',
+        details: 'ブラウザセキュリティ(CORS)によりChatwork APIへの直通信が制限されています。'
+      };
     } catch (e) {
       console.warn('Failed to send Chatwork reminder:', e);
-      return { success: false, count: 0, reason: 'network_error' };
+      return { success: false, count: 0, reason: 'network_error', details: e.message };
     }
   }
 }
