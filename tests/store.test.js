@@ -260,7 +260,13 @@ function runTests() {
 
   console.log('✅ Test 15 Passed: getDueOrOverdueTodos() filters logic correctly');
 
-  console.log('🎉 All tests passed successfully!');
+  // Test 16: sendChatworkReminder() return object format test
+  store.sendChatworkReminder(today).then(result => {
+    assert.strictEqual(typeof result, 'object', 'sendChatworkReminder should return an object');
+    assert.strictEqual(result.count, 2, 'Should report 2 due/overdue tasks');
+    console.log('✅ Test 16 Passed: sendChatworkReminder() return format test');
+    console.log('🎉 All tests passed successfully!');
+  });
 }
 
 runTests();

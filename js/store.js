@@ -327,34 +327,55 @@ class TodoStore {
   /**
    * Send a Chatwork reminder for due or overdue tasks
    * @param {Date|string} currentDate
-   * @returns {Promise<boolean>} True if successful or safely caught
+   * @returns {Promise<Object>} Status object { success: boolean, count: number, reason?: string }
    */
   async sendChatworkReminder(currentDate = new Date()) {
     try {
       const dueTodos = this.getDueOrOverdueTodos(currentDate);
       if (dueTodos.length === 0) {
-        return true; // Nothing to send
+        return { success: true, count: 0, reason: 'no_tasks' }; // Nothing to send
       }
 
-      const taskList = dueTodos.map(t => `- ${t.text} (期限: ${t.dueDate})`).join('\n');
-      const message = `[info][title]🔔 リマインド: 本日・期限切れのタスクがあります[/title]\n${taskList}[/info]`;
+      const taskList = dueTodos.map(t => `・${t.text} (期限: ${t.dueDate})`).join('\n');
+      const message = `[info][title]⏰ Focus TODO リマインダー[/title]以下のタスクが期限当日または超過しています:\n${taskList}[/info]`;
 
-      const response = await fetch('https://api.chatwork.com/v2/rooms/385392979/messages', {
-        method: 'POST',
-        headers: {
-          'X-ChatWorkToken': 'e8e8e25a481d270457a2fd7adb4e0af9',
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({ body: message })
-      });
-      
-      if (!response.ok) {
-        console.warn('Chatwork API request failed:', response.status);
+      const targetUrl = 'https://api.chatwork.com/v2/rooms/385392979/messages';
+      const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
+      const params = new URLSearchParams({ body: message });
+
+      let response;
+      try {
+        // Try via CORS proxy first to bypass browser CORS restriction
+        response = await fetch(proxyUrl, {
+          method: 'POST',
+          headers: {
+            'X-ChatWorkToken': 'e8e8e25a481d270457a2fd7adb4e0af9',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: params
+        });
+      } catch (proxyError) {
+        console.warn('CORS Proxy failed, falling back to direct fetch:', proxyError);
+        // Fallback to direct fetch
+        response = await fetch(targetUrl, {
+          method: 'POST',
+          headers: {
+            'X-ChatWorkToken': 'e8e8e25a481d270457a2fd7adb4e0af9',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: params
+        });
       }
-      return true;
+
+      if (response && response.ok) {
+        return { success: true, count: dueTodos.length };
+      } else {
+        console.warn('Chatwork API response not ok:', response ? response.status : 'No response');
+        return { success: false, count: dueTodos.length, reason: 'api_error' };
+      }
     } catch (e) {
       console.warn('Failed to send Chatwork reminder:', e);
-      return false;
+      return { success: false, count: 0, reason: 'network_error' };
     }
   }
 }

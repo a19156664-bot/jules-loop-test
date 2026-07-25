@@ -663,8 +663,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check if it's after 6:00 AM today and we haven't sent it yet today
     if (now.getHours() >= 6 && lastSentDateStr !== todayStr) {
-      store.sendChatworkReminder().then(success => {
-        if (success) {
+      store.sendChatworkReminder().then(result => {
+        if (result && result.success && result.count > 0) {
           localStorage.setItem('chatwork_last_sent_date', todayStr);
           console.log('Automated Chatwork reminder sent successfully.');
         }
@@ -679,20 +679,22 @@ document.addEventListener('DOMContentLoaded', () => {
       const originalText = btnSendReminder.textContent;
       btnSendReminder.textContent = '⏳ 送信中...';
       
-      const success = await store.sendChatworkReminder();
+      const result = await store.sendChatworkReminder();
       
-      if (success) {
-        btnSendReminder.textContent = '✅ 送信完了';
-        // Optional: show a clean toast
-        // alert('Chatworkにリマインドを送信しました。');
+      if (result.success) {
+        if (result.count === 0) {
+          btnSendReminder.textContent = 'ℹ️ 対象タスクなし';
+        } else {
+          btnSendReminder.textContent = `✅ ${result.count}件送信完了`;
+        }
       } else {
-        btnSendReminder.textContent = '❌ 送信失敗';
+        btnSendReminder.textContent = '❌ 送信失敗 (CORS/API制限)';
       }
       
       setTimeout(() => {
         btnSendReminder.disabled = false;
         btnSendReminder.textContent = originalText;
-      }, 3000);
+      }, 3500);
     });
   }
 
