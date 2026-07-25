@@ -359,10 +359,27 @@ class TodoStore {
         }
       }
 
-      // Try multiple CORS proxy services sequentially
+      // 1. First priority: Direct fetch (Fastest & 100% stable when Allow CORS extension is ON or on same domain)
+      try {
+        const directRes = await fetch(targetUrl, {
+          method: 'POST',
+          headers: {
+            'X-ChatWorkToken': token,
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: bodyParams
+        });
+        if (directRes && directRes.ok) {
+          return { success: true, count: dueTodos.length };
+        }
+      } catch (directErr) {
+        console.warn('Direct fetch blocked by browser CORS, trying proxy services:', directErr);
+      }
+
+      // 2. Second priority: Try CORS proxy services sequentially as backup
       const proxyList = [
-        `https://thingproxy.freeboard.io/fetch/${targetUrl}`,
-        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
+        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+        `https://thingproxy.freeboard.io/fetch/${targetUrl}`
       ];
 
       for (const proxy of proxyList) {
@@ -375,29 +392,12 @@ class TodoStore {
             },
             body: bodyParams
           });
-          if (response.ok) {
+          if (response && response.ok) {
             return { success: true, count: dueTodos.length };
           }
         } catch (pErr) {
           console.warn('Proxy attempt failed:', pErr);
         }
-      }
-
-      // Fallback: direct fetch attempt
-      try {
-        const directRes = await fetch(targetUrl, {
-          method: 'POST',
-          headers: {
-            'X-ChatWorkToken': token,
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: bodyParams
-        });
-        if (directRes.ok) {
-          return { success: true, count: dueTodos.length };
-        }
-      } catch (directErr) {
-        console.warn('Direct fetch failed due to browser CORS restriction:', directErr);
       }
 
       return {
