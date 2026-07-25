@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const priorityInput = document.getElementById('todo-priority');
   const dateInput = document.getElementById('todo-due-date');
   
-  const listDoFirst = document.getElementById('list-do-first');
-  const listSchedule = document.getElementById('list-schedule');
-  const listDelegate = document.getElementById('list-delegate');
-  const listMemo = document.getElementById('list-memo');
+  const listDoFirst = document.getElementById('todo-list-do_first');
+  const listSchedule = document.getElementById('todo-list-schedule');
+  const listDelegate = document.getElementById('todo-list-delegate');
+  const listMemo = document.getElementById('todo-list-memo');
   const listCompleted = document.getElementById('list-completed');
 
   const counter = document.getElementById('todo-counter');
@@ -133,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       li.innerHTML = `
         <div class="todo-left">
+          <span class="drag-handle" title="ドラッグして移動" style="cursor: grab; color: var(--text-muted); margin-right: 4px; user-select: none;">#</span>
           <div class="checkbox-custom" role="checkbox" aria-checked="${todo.completed}">
             ${todo.completed ? `
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">

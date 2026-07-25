@@ -1,0 +1,20 @@
+Task 20: [NEW] Fix Task Addition Logic and Quadrant Rendering Bug
+
+## Objective
+Fix a bug where clicking the "Add Task" ("追加 +") button creates a todo item in `store` and updates the task counter, but fails to render the new todo card element inside the targeted 4-quadrant list column in `index.html` / `js/app.js`.
+
+## DoD (Definition of Done)
+1. In `js/app.js`, inspect the form submission event listener and `render()` loop. Ensure that when a user submits a new task with a selected quadrant (defaulting to `'do_first'`), the new todo item is immediately appended to the correct quadrant list element (`#todo-list-do_first`, `#todo-list-schedule`, `#todo-list-delegate`, `#todo-list-memo`).
+2. Ensure that quadrant filter, priority filter, and task count displays dynamically update and match the actual rendered DOM task cards 100%.
+3. Verify that all 13 existing unit tests in `tests/store.test.js` continue to pass cleanly (100% green).
+
+## Allowed Scope
+- index.html
+- js/app.js
+- js/store.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

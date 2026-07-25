@@ -1,0 +1,21 @@
+Task 21: [NEW] Full-Screen Eisenhower Matrix Desktop UI Redesign
+
+## Objective
+Redesign the UI layout from a small centered card container (`max-width: 1200px`) into a full-screen desktop dashboard matching the user's reference image (Eisenhower Matrix Premium). The 4 quadrant columns ("Do First", "Schedule", "Delegate", "Memo / 備忘録") must span the full desktop screen width (100vw / 100vh) as the primary main view.
+
+## DoD (Definition of Done)
+1. In `style.css` and `index.html`, remove the restrictive `.app-container` max-width/card-wrapper styling. Make the main layout occupy 100% of the browser width and viewport height with rich glassmorphism/dark-mode styling matching the reference screenshot.
+2. Position the app header and task entry bar cleanly at the top of the full-screen dashboard. Style the 4 quadrant columns as tall, prominent full-height cards that dynamically flex to fill the remaining screen space.
+3. Ensure the 4 quadrants ("Do First" with red accent, "Schedule" with blue accent, "Delegate" with yellow accent, "Memo" with green accent) have individual vertical scrollbars, drag handles (`#` icon), and drag-to-resize support.
+4. Maintain dark, light, and pastel-green theme compatibility while preserving all 13 passing unit tests in `tests/store.test.js`.
+
+## Allowed Scope
+- index.html
+- style.css
+- js/app.js
+
+## Protected Paths (DO NOT MODIFY)
+- .nightly/
+- .github/
+- AGENTS.md
+- task_template.md

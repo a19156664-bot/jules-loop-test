@@ -157,6 +157,25 @@
   - [x] 各象限のヘッダーに「ブラインドボタン」を配置し、押下時に窓のブラインドのように上から下へ滑らかにカバーが降りてタスク内容をお洒落に伏せるアニメーションを実装すること
   - [x] 再押下でブラインドが巻き上がり、タスク一覧が復元表示されること
 
+---
+
+## 🔧 緊急修復 ＆ UI大画面化バージョンアップ (Task 20, Task 21)
+
+### [x] Task 20: [NEW] Fix Task Addition Logic and Quadrant Rendering Bug (Bug Fix)
+- **DoD (完了条件)**:
+  - [x] `js/app.js` および `js/store.js` にて、フォーム入力からの「追加」ボタン押下時に指定象限（`do_first`, `schedule`, `delegate`, `memo`）のDOMリストへ即座にタスクカードが正しく追加・描画されるように修正すること
+  - [x] カウンター件数と描画タスク数が100%一致すること
+  - [x] 全13件の単体テストが100%グリーンでパスすること
+
+---
+
+### [x] Task 21: [NEW] Full-Screen Eisenhower Matrix Desktop UI Redesign (UI Redesign)
+- **DoD (完了条件)**:
+  - [x] `style.css` および `index.html` から小枠コンテナ制限 (`max-width: 1200px` 囲み) を廃止し、見本画像2のようにパソコン画面全体 (100vw / 100vh) を使った4象限メインの大画面ボードレイアウトへ刷新すること
+  - [x] 上部入力ヘッダーをスッキリ配置し、画面主要領域に4つの象限（Do First, Schedule, Delegate, Memo）が堂々と大画面で広がるプロ仕様のデザインにすること
+  - [x] 全テーマ (Dark, Light, Pastel Green) で大画面レスポンシブ配置を美しく維持すること
+
+
 
 
 

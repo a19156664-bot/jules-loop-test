@@ -11,19 +11,19 @@
 </head>
 <body>
   <div class="app-container">
-    <header class="app-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <header class="app-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <div>
         <div class="logo">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5">
             <polyline points="9 11 12 14 22 4"></polyline>
             <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
           </svg>
-          <h1>Focus TODO</h1>
+          <h1 style="font-size: 1.8rem; font-weight: 700; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Eisenhower Matrix <span style="font-size: 0.85rem; font-weight: 400; color: #94a3b8; -webkit-text-fill-color: initial;">Premium</span></h1>
         </div>
-        <p class="subtitle">シンプルで高効率なタスク管理</p>
+        <p class="subtitle" style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">4つの象限でタスクを整理 • ドラッグ＆ドロップで操作</p>
       </div>
-      <div class="theme-selector" style="display: flex; gap: 10px;">
-        <button id="btn-completed-drawer" class="btn-clear-all" title="完了タスク">完了タスク</button>
+      <div class="theme-selector" style="display: flex; gap: 10px; align-items: center;">
+        <button id="btn-completed-drawer" class="btn-timer" title="タスク完了箱を開く">📦 タスク完了箱</button>
         <select id="theme-select" class="priority-select" title="テーマ選択">
           <option value="dark">ダークモード</option>
           <option value="light">ホワイトモード</option>

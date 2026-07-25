@@ -4,8 +4,8 @@
   color-scheme: dark;
   --app-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --bg-color: #0f172a;
-  --card-bg: #1e293b;
-  --card-border: #334155;
+  --card-bg: rgba(30, 41, 59, 0.7);
+  --card-border: rgba(51, 65, 85, 0.8);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --accent-color: #6366f1;
@@ -21,9 +21,9 @@
 
 [data-theme="light"] {
   color-scheme: light;
-  --bg-color: #f1f5f9;
-  --card-bg: #ffffff;
-  --card-border: #cbd5e1;
+  --bg-color: #e2e8f0;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(203, 213, 225, 0.8);
   --text-main: #0f172a;
   --text-muted: #64748b;
   --accent-color: #3b82f6;
@@ -36,9 +36,9 @@
 
 [data-theme="pastel-green"] {
   color-scheme: light;
-  --bg-color: #f0fdf4;
-  --card-bg: #ffffff;
-  --card-border: #bbf7d0;
+  --bg-color: #dcfce7;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(187, 247, 208, 0.8);
   --text-main: #14532d;
   --text-muted: #166534;
   --accent-color: #22c55e;
@@ -70,28 +70,42 @@ body {
   font-family: var(--app-font);
   background-color: var(--bg-color);
   color: var(--text-main);
-  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 40px 20px;
+  padding: 0;
+  margin: 0;
   line-height: 1.5;
+  overflow: hidden;
 }
 
 .app-container {
   width: 100%;
-  max-width: 1200px; /* Increased for 4 columns */
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  height: 100%;
+  max-width: none;
+  background: var(--bg-color);
+  border: none;
+  border-radius: 0;
+  padding: 24px 32px;
+  box-shadow: none;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-header {
-  margin-bottom: 28px;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden; /* To allow inner elements to control scrolling */
 }
 
 .logo {
@@ -286,10 +300,24 @@ body {
   transition: var(--transition-fast);
   animation: fadeIn 0.25s ease-out;
   position: relative;
-  cursor: grab;
 }
 
-.todo-item:active {
+.drag-handle {
+  font-size: 1.1rem;
+  font-weight: 400;
+  cursor: grab;
+  color: var(--text-muted);
+  user-select: none;
+  opacity: 0.5;
+  transition: opacity var(--transition-fast);
+  margin-right: 4px;
+}
+
+.drag-handle:hover {
+  opacity: 1;
+}
+
+.drag-handle:active {
   cursor: grabbing;
 }
 
@@ -371,35 +399,31 @@ body {
 
 /* Eisenhower Matrix Layout */
 .matrix-container {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 20px;
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
 }
 
-@media (min-width: 768px) {
-  .matrix-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .quadrants-container {
+.quadrants-container {
   display: flex;
   flex-direction: row;
   align-items: stretch;
   gap: 4px;
-  margin-bottom: 24px;
-  overflow-x: auto;
+  flex: 1;
+  overflow: hidden;
 }
 
 .quadrant-column {
   flex: 1 1 0px;
   min-width: 180px;
-  background: rgba(0, 0, 0, 0.02);
-  border: 1px dashed var(--card-border);
-  border-radius: var(--radius-md);
-  padding: 16px;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -531,9 +555,29 @@ body {
   color: var(--success-color);
 }
 
-.matrix-quadrant .todo-list {
+.quadrant-list {
   flex: 1;
   overflow-y: auto;
+  min-height: 0; /* Important for flex-child scrolling */
+  padding-right: 4px;
+}
+
+/* Scrollbar styling for individual quadrant lists */
+.quadrant-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.quadrant-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.quadrant-list::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 3px;
+}
+
+.quadrant-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
 
 /* Completed Drawer */

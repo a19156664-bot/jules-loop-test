@@ -28,8 +28,10 @@
 | **Task 15** | 4-Quadrant Eisenhower Matrix Data Model & Font Clean-up | Jules | Pass (Test 1~12) | 検収完了 | 30分タイマー監視＆自動検収・Session `9795886713874596832` |
 | **Task 16** | HTML5 Drag & Drop Implementation for Quadrants | Jules | Pass (Test 1~12) | 検収完了 | 30分タイマー監視＆自動検収・Session `14884084053353404076` |
 | **Task 17** | Negative Impression Improvement Sheet Modal with Print & Timer | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `15120677455947216698` |
-| **Task 18** | Interactive Quadrant Column Resizing | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `10091134432717859996` |
-| **Task 19** | Top-to-Bottom Window Blind Shutter Effect for Privacy | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `11317541287075953486` |
+| **Task 18** | Interactive Quadrant Column Resizing | Jules | Pass (Test 1~13) | `main` 統合 | 30分タイマー監視＆自動検収・Session `10091134432717859996` |
+| **Task 19** | Top-to-Bottom Window Blind Shutter Effect for Privacy | Jules | Pass (Test 1~13) | `main` 統合 | 30分タイマー監視＆自動検収・Session `11317541287075953486` |
+| **Task 20** | Fix Task Addition Logic and Quadrant Rendering Bug | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `16905223753505901282` |
+| **Task 21** | Full-Screen Eisenhower Matrix Desktop UI Redesign | Jules | Pass (Test 1~13) | 検収完了 | 30分タイマー監視＆自動検収・Session `18225416251161611955` |
 
 ---
 
@@ -87,13 +89,10 @@
 
 ## 🔮 4. 今後のロードマップ & 次の展開案
 
-「パターンB（一括パイプラインモデル）」に基づき、Eisenhower Matrix 大規模バージョンアップ（Task 15 〜 Task 19）を順次自律発注中です。
+「パターンB（一括パイプラインモデル）」に基づき、追加機能不具合修正および大画面UI刷新タスク（Task 20, 21）を発注・進行中です。
 
-* **[ ] Task 15: 4-Quadrant Eisenhower Matrix Data Model & Font Clean-up (工程 ①, ⑤)**
-* **[ ] Task 16: HTML5 Drag & Drop Implementation for Quadrants (工程 ②)**
-* **[ ] Task 17: Negative Impression Improvement Sheet Modal with Print & Timer (工程 ③)**
-* **[ ] Task 18: Interactive Quadrant Column Resizing (工程 ④)**
-* **[ ] Task 19: Top-to-Bottom Window Blind Shutter Effect for Privacy (工程 ⑥)**
+* **[ ] Task 20: Fix Task Addition Logic and Quadrant Rendering Bug (バグ修復)**
+* **[ ] Task 21: Full-Screen Eisenhower Matrix Desktop UI Redesign (大画面UI刷新)**
 
 ---
 
