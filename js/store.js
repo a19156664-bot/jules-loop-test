@@ -344,34 +344,28 @@ class TodoStore {
       const targetUrl = `https://api.chatwork.com/v2/rooms/${roomId}/messages`;
       const bodyParams = new URLSearchParams({ body: message });
 
-      // Guaranteed Delivery via Hidden Form (CORS bypass for Browser)
-      if (typeof document !== 'undefined') {
-        const form = document.getElementById('chatwork-form');
-        const textarea = form ? form.querySelector('textarea[name="body"]') : null;
-        if (form && textarea) {
-          try {
-            form.action = `${targetUrl}?x-chatworktoken=${token}`;
-            textarea.value = message;
-            form.submit();
-            return { success: true, count: dueTodos.length, reason: 'hidden_form' };
-          } catch (formErr) {
-            console.warn('Hidden form submission failed:', formErr);
-          }
-        }
-      }
-
       // Check if user has configured a custom webhook / proxy endpoint in localStorage
-      const customEndpoint = localStorage.getItem('chatwork_custom_endpoint');
-      if (customEndpoint) {
-        try {
-          const res = await fetch(customEndpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: bodyParams
-          });
-          if (res.ok) return { success: true, count: dueTodos.length };
-        } catch (err) {
-          console.warn('Custom endpoint failed:', err);
+      if (typeof localStorage !== 'undefined') {
+        const customEndpoint = localStorage.getItem('chatwork_custom_endpoint');
+        if (customEndpoint) {
+          try {
+            const res = await fetch(customEndpoint, {
+              method: 'POST',
+              headers: { 
+                'X-ChatWorkToken': token,
+                'Content-Type': 'application/x-www-form-urlencoded' 
+              },
+              body: bodyParams
+            });
+            if (res.ok) {
+              return { success: true, count: dueTodos.length };
+            } else {
+              return { success: false, reason: 'custom_endpoint_error', details: `HTTP Status: ${res.status}` };
+            }
+          } catch (err) {
+            console.warn('Custom endpoint failed:', err);
+            return { success: false, count: dueTodos.length, reason: 'custom_endpoint_failed', details: err.message };
+          }
         }
       }
 
@@ -387,6 +381,16 @@ class TodoStore {
         });
         if (directRes && directRes.ok) {
           return { success: true, count: dueTodos.length };
+        } else if (directRes) {
+          // If response is not ok (e.g. 401 Unauthorized), we might still want to try proxies? 
+          // Usually if it's 401, proxies will also get 401. So returning error might be better.
+          if (directRes.status !== 0 && directRes.status !== 401) {
+             // Let it fallback to proxy if it's CORS? Actually CORS error throws exception. 
+             // If it's a real HTTP error, returning false is right.
+             return { success: false, count: dueTodos.length, reason: 'api_error', details: `HTTP Status: ${directRes.status}` };
+          } else if (directRes.status === 401) {
+             return { success: false, count: dueTodos.length, reason: 'api_error', details: `HTTP Status: ${directRes.status}` };
+          }
         }
       } catch (directErr) {
         console.warn('Direct fetch blocked by browser CORS, trying proxy services:', directErr);
@@ -410,6 +414,9 @@ class TodoStore {
           });
           if (response && response.ok) {
             return { success: true, count: dueTodos.length };
+          } else if (response) {
+            // Not throwing, so we got a response but not ok.
+            console.warn(`Proxy ${proxy} returned status ${response.status}`);
           }
         } catch (pErr) {
           console.warn('Proxy attempt failed:', pErr);
@@ -420,7 +427,7 @@ class TodoStore {
         success: false,
         count: dueTodos.length,
         reason: 'cors_blocked',
-        details: 'ブラウザセキュリティ(CORS)によりChatwork APIへの直通信が制限されています。'
+        details: 'ブラウザセキュリティ(CORS)によりChatwork APIへの直通信が制限されています。またはAPIキーが無効です。'
       };
     } catch (e) {
       console.warn('Failed to send Chatwork reminder:', e);

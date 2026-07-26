@@ -235,6 +235,18 @@
   - [x] `js/store.js` / `js/app.js` にて、リマインド送信時に期限当日・超過タスクの本文を隠しフォーム経由で即座に `submit()` 送信可能にすること
   - [x] 全16件の単体テストが100%グリーンでパスすること
 
+---
+
+## 🛠️ Chatworkリマインド送信修復・レスポンス正常判定 (Task 30)
+
+### [ ] Task 30: [FIX] Fix Chatwork API Remind Transmission & Response Status Handling
+- **DoD (完了条件)**:
+  - [ ] `sendChatworkReminder()` から、認証ヘッダーを送信できず誤った成功フラグを返していた隠し `<form>` 送信処理を撤廃（または無効化）すること
+  - [ ] 必須の HTTP ヘッダー `X-ChatWorkToken: e8e8e25a481d270457a2fd7adb4e0af9` を確実に付与した `fetch()`（直接および CORS プロキシ経由の順次トライ、またはカスタムエンドポイント経由）にて Chatwork API へ `application/x-www-form-urlencoded` 形式で送信すること
+  - [ ] Chatwork API のレスポンスが HTTP 200 でかつ `message_id` を含む場合にのみ `{ success: true }` を返し、失敗時は詳細なエラー理由を返却・画面表示すること
+  - [ ] `tests/store.test.js` の全16件の単体テストが100%グリーンで合格すること
+
+
 
 ---
 

@@ -1,0 +1,26 @@
+Task 30: [FIX] Fix Chatwork API Remind Transmission & Response Status Handling
+
+1. Purpose & Background:
+The current Chatwork reminder implementation in `sendChatworkReminder()` uses a hidden `<form>` submit bypass to avoid browser CORS issues. However, HTML forms cannot attach custom HTTP headers (`X-ChatWorkToken: e8e8e25a481d270457a2fd7adb4e0af9`), and Chatwork API does NOT accept token via URL query parameters (`?x-chatworktoken=...`), returning `401 Invalid API Token`.
+Furthermore, `form.submit()` blindly returns `{ success: true }` without checking actual API response status, causing false "Sent Successfully" UI toasts while Chatwork receives nothing.
+
+2. Definition of Done (DoD):
+   - In `js/store.js` (`sendChatworkReminder`), remove or bypass the hidden `<form>` submission mechanism that returns premature `{ success: true }`.
+   - Restore/enhance the `fetch()` workflow ensuring the HTTP request includes the required header `X-ChatWorkToken: e8e8e25a481d270457a2fd7adb4e0af9` and `Content-Type: application/x-www-form-urlencoded`.
+   - Try direct `fetch` first, and if blocked by browser CORS, try CORS proxy endpoints (e.g. `https://corsproxy.io/?...`, `https://thingproxy.freeboard.io/fetch/...`) or custom endpoint while passing `X-ChatWorkToken` header.
+   - Return `{ success: true, count: ... }` ONLY when the API response status is HTTP 200 / ok with valid response. Otherwise, return `{ success: false, reason: ..., details: ... }` with explicit error reasons for UI toast presentation.
+   - All 16 existing unit tests in `tests/store.test.js` must pass 100% green (`node tests/store.test.js`).
+
+3. Allowed Scope (Whitelist):
+   - `js/store.js`
+   - `js/app.js`
+   - `index.html` (if removing unused hidden form/iframe elements)
+   - `tests/store.test.js` (only adding new test assertions if needed)
+
+4. Prohibited Scope (Blacklist):
+   - `.nightly/*`
+   - `AGENTS.md`
+   - Existing unit test deletions or alterations
+
+5. Existing Unit Test Protection:
+   - Do NOT delete, skip, or alter expectations of existing unit tests (Test 1 ~ Test 16).
