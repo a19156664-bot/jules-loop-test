@@ -239,12 +239,24 @@
 
 ## 🛠️ Chatworkリマインド送信修復・レスポンス正常判定 (Task 30)
 
-### [ ] Task 30: [FIX] Fix Chatwork API Remind Transmission & Response Status Handling
+### [x] Task 30: [FIX] Fix Chatwork API Remind Transmission & Response Status Handling
 - **DoD (完了条件)**:
-  - [ ] `sendChatworkReminder()` から、認証ヘッダーを送信できず誤った成功フラグを返していた隠し `<form>` 送信処理を撤廃（または無効化）すること
-  - [ ] 必須の HTTP ヘッダー `X-ChatWorkToken: e8e8e25a481d270457a2fd7adb4e0af9` を確実に付与した `fetch()`（直接および CORS プロキシ経由の順次トライ、またはカスタムエンドポイント経由）にて Chatwork API へ `application/x-www-form-urlencoded` 形式で送信すること
-  - [ ] Chatwork API のレスポンスが HTTP 200 でかつ `message_id` を含む場合にのみ `{ success: true }` を返し、失敗時は詳細なエラー理由を返却・画面表示すること
-  - [ ] `tests/store.test.js` の全16件の単体テストが100%グリーンで合格すること
+  - [x] `sendChatworkReminder()` から、認証ヘッダーを送信できず誤った成功フラグを返していた隠し `<form>` 送信処理を撤廃（または無効化）すること
+  - [x] 必須の HTTP ヘッダー `X-ChatWorkToken: e8e8e25a481d270457a2fd7adb4e0af9` を確実に付与した `fetch()`（直接および CORS プロキシ経由の順次トライ、またはカスタムエンドポイント経由）にて Chatwork API へ `application/x-www-form-urlencoded` 形式で送信すること
+  - [x] Chatwork API のレスポンスが HTTP 200 でかつ `message_id` を含む場合にのみ `{ success: true }` を返し、失敗時は詳細なエラー理由を返却・画面表示すること
+  - [x] `tests/store.test.js` の全16件の単体テストが100%グリーンで合格すること
+
+---
+
+## 🚀 GAS Webhook プロキシ統合による通信100%安定化 (Task 31)
+
+### [ ] Task 31: [NEW] Integrate Custom GAS Webhook Endpoint for 100% Guaranteed Chatwork Transmission
+- **DoD (完了条件)**:
+  - [ ] `js/store.js` 内の `sendChatworkReminder()` にて、デフォルトのカスタム中継エンドポイントとして `https://script.google.com/macros/s/AKfycbznXOvxEtK9qefz-UD3bi_rwJRJUqBTeL3Ksl6t5b__rHOwWSVGbtn_aI7hT8CQk2G9pQ/exec` を組み込み、第一優先で送信試行すること
+  - [ ] `POST` リクエストで `URLSearchParams` (`body: message`) を送信し、JSONレスポンスの `{ success: true }` を判定して即座に `{ success: true, count: ... }` を返却すること
+  - [ ] `tests/store.test.js` の全16件の単体テストが100%グリーンでパスすること
+
+
 
 
 

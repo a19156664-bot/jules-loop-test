@@ -1,0 +1,25 @@
+Task 31: [NEW] Integrate Custom GAS Webhook Endpoint for 100% Guaranteed Chatwork Transmission
+
+1. Purpose & Background:
+The user has created and deployed a dedicated Google Apps Script (GAS) Webhook relay endpoint:
+`https://script.google.com/macros/s/AKfycbznXOvxEtK9qefz-UD3bi_rwJRJUqBTeL3Ksl6t5b__rHOwWSVGbtn_aI7hT8CQk2G9pQ/exec`
+This endpoint bypasses all browser CORS restrictions and 100% reliably posts reminder messages to Chatwork. We need to integrate this endpoint as the default primary custom endpoint in `sendChatworkReminder()` so that reminders are delivered smoothly in all browser environments without needing browser extensions.
+
+2. Definition of Done (DoD):
+   - In `js/store.js` (`sendChatworkReminder`), set default custom endpoint URL to `https://script.google.com/macros/s/AKfycbznXOvxEtK9qefz-UD3bi_rwJRJUqBTeL3Ksl6t5b__rHOwWSVGbtn_aI7hT8CQk2G9pQ/exec` (or check `localStorage.getItem('chatwork_custom_endpoint') || 'https://script.google.com/macros/s/AKfycbznXOvxEtK9qefz-UD3bi_rwJRJUqBTeL3Ksl6t5b__rHOwWSVGbtn_aI7hT8CQk2G9pQ/exec'`).
+   - Trigger a `POST` fetch request to this GAS endpoint with `Content-Type: application/x-www-form-urlencoded` and body `body=...` (using `URLSearchParams`).
+   - Parse the JSON response and if `res.ok` and `data.success === true`, immediately return `{ success: true, count: dueTodos.length }`.
+   - If the GAS endpoint fails, fall back to direct fetch / CORS proxy logic.
+   - Ensure all 16 existing unit tests in `tests/store.test.js` pass 100% green (`node tests/store.test.js`).
+
+3. Allowed Scope (Whitelist):
+   - `js/store.js`
+   - `tests/store.test.js`
+
+4. Prohibited Scope (Blacklist):
+   - `.nightly/*`
+   - `AGENTS.md`
+   - Existing unit test deletions or alterations
+
+5. Existing Unit Test Protection:
+   - Do NOT delete, skip, or alter expectations of existing unit tests.

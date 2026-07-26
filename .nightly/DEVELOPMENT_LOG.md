@@ -41,6 +41,7 @@
 | **Task 28** | Chatwork Remind Notification Feature for Due/Overdue Tasks | Jules | Pass (Test 1~15) | 検収完了 | 30分タイマー監視＆自動検収・Session `1545387087279976427` |
 | **Task 29** | Guaranteed Chatwork Notification via Hidden Form & Iframe Submission | Jules | Pass (Test 1~16) | 検収完了 | 30分タイマー監視＆自動検収・Session `7322212612972546435` |
 | **Task 30** | Fix Chatwork API Remind Transmission & Response Status Handling | Jules | Pass (Test 1~16) | 検収完了 | 30分タイマー監視＆自動検収・Session `1931676883710412767` |
+| **Task 31** | Integrate Custom GAS Webhook Endpoint for 100% Guaranteed Chatwork Transmission | Jules | Pass (Test 1~16) | 検収完了 | 30分タイマー監視＆自動検収・Session `7422333720456598667` |
 
 ---
 
@@ -49,10 +50,12 @@
 ### 📌 実施業務内容
 1. **Chatworkリマインド送信不具合の調査・原因特定**:
    - URLクエリパラメータでのトークン指定が Chatwork API 仕様非対応（`HTTP 401`）であり、隠し `<form>` がレスポンス未確認で無条件成功を返していた不具合を発見・特定。
-2. **Jules CLI 経由での Task 30 自動発注**:
-   - `task30_prompt.txt`（プロンプト）を作成し、`type task30_prompt.txt | jules.exe new` で発注（Session ID: `1931676883710412767`）。
+2. **Jules CLI 経由での Task 30 / Task 31 自動発注**:
+   - `task30_prompt.txt` / `task31_prompt.txt`（プロンプト）を作成し、`type taskXX_prompt.txt | jules.exe new` で自動発注。
    - 発注直後に 30分タイマー（`schedule`）を設定し、自動検収パイプラインを起動。
-3. **成果物の自動引き戻し＆単体テスト全件合格検証**:
+3. **専用 GAS Webhook エンドポイントの構築＆統合テスト**:
+   - ユーザー様にデプロイいただいた GAS エンドポイントに対する通信テストを自動実行し `HTTP 200` & `message_id` 取得を合格検証。
+4. **成果物の自動引き戻し＆単体テスト全件合格検証**:
    - `jules remote pull --apply` にて Jules の成果物を適用。
    - `node tests/store.test.js` を実行し、全16件の単体テストが 100% グリーンで合格したことを確認。
 

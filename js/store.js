@@ -345,9 +345,36 @@ class TodoStore {
       const bodyParams = new URLSearchParams({ body: message });
 
       // Check if user has configured a custom webhook / proxy endpoint in localStorage
+      let customEndpoint = 'https://script.google.com/macros/s/AKfycbznXOvxEtK9qefz-UD3bi_rwJRJUqBTeL3Ksl6t5b__rHOwWSVGbtn_aI7hT8CQk2G9pQ/exec';
       if (typeof localStorage !== 'undefined') {
-        const customEndpoint = localStorage.getItem('chatwork_custom_endpoint');
-        if (customEndpoint) {
+        customEndpoint = localStorage.getItem('chatwork_custom_endpoint') || customEndpoint;
+      }
+      
+      const isGAS = customEndpoint === 'https://script.google.com/macros/s/AKfycbznXOvxEtK9qefz-UD3bi_rwJRJUqBTeL3Ksl6t5b__rHOwWSVGbtn_aI7hT8CQk2G9pQ/exec';
+      
+      if (customEndpoint) {
+        if (isGAS) {
+          // 0. Primary priority: GAS Webhook Endpoint
+          try {
+            const res = await fetch(customEndpoint, {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/x-www-form-urlencoded' 
+              },
+              body: bodyParams
+            });
+            
+            if (res.ok) {
+              const data = await res.json();
+              if (data.success === true) {
+                return { success: true, count: dueTodos.length };
+              }
+            }
+          } catch (err) {
+            console.warn('GAS endpoint failed, falling back to direct fetch / CORS proxy:', err);
+          }
+        } else {
+          // Legacy behavior for custom proxy endpoints
           try {
             const res = await fetch(customEndpoint, {
               method: 'POST',
